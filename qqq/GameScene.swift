@@ -1,12 +1,3 @@
-//
-//  GameScene.swift
-//  qqq
-//
-//  Created by Pavel Samarkin on 3/15/15.
-//  Copyright (c) 2015 Pavel Samarkin. All rights reserved.
-//
-
-import Foundation
 import SceneKit
 
 class GameScene {

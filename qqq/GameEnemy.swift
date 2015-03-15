@@ -1,7 +1,6 @@
-import Foundation
 import SceneKit
 
-public class GameEnemy {
+class GameEnemy {
     private var node: SCNNode
     private unowned let game: GameController
     private var direction: GameDirection
@@ -27,7 +26,7 @@ public class GameEnemy {
         NSColor.orangeColor()
     ]
 
-    public func move(time: NSTimeInterval) -> GameMoveResult {
+    func move(time: NSTimeInterval) -> GameMoveResult {
         if (timeToMove) {
             timeToMove = false
             let oldPosition = xy

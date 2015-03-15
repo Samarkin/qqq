@@ -1,20 +1,20 @@
 import AppKit
 
-public protocol KeyEventsHandler: class {
+protocol KeyEventsDelegate: class {
     func keyDown(theEvent: NSEvent) -> Bool
     func keyUp(theEvent: NSEvent) -> Bool
 }
 
-public protocol GameController: class {
+protocol GameController: class {
     func itemAt(coordinates: (Int,Int)) -> GameItem
     func setItemAt(coordinates: (Int,Int), item: GameItem)
 }
 
-public protocol GameProcessor: class {
+protocol GameProcessor: class {
     func updateAtTime(time: NSTimeInterval)
 }
 
-class GameEngine : GameProcessor, KeyEventsHandler, GameController {
+class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     private let scene: GameScene
     private var ship: GameShip?
     private var gameField: [[GameItem]]

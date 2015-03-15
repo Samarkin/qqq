@@ -1,6 +1,4 @@
-import Foundation
-
-public enum GameMoveResult {
+enum GameMoveResult {
     case Success
     case NextLevel
     case GameOver

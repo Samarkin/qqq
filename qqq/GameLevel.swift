@@ -1,4 +1,3 @@
-import Foundation
 import SceneKit
 
 private var boxes: [SCNNode] = []

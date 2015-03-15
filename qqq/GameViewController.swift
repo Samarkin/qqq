@@ -1,13 +1,4 @@
-//
-//  GameViewController.swift
-//  qqq
-//
-//  Created by Pavel Samarkin on 12/10/14.
-//  Copyright (c) 2014 Pavel Samarkin. All rights reserved.
-//
-
 import SceneKit
-import QuartzCore
 
 class GameViewController: NSViewController, SCNSceneRendererDelegate {
     @IBOutlet weak var gameView: GameView!
@@ -45,7 +36,7 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
 
         // add game engine
         self.gameView!.delegate = self
-        self.gameView!.keyEventsHandler = self.gameEngine
+        self.gameView!.keyEventsDelegate = self.gameEngine
 
         // allows the user to manipulate the camera
         //self.gameView!.allowsCameraControl = true

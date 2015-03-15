@@ -1,4 +1,3 @@
-import Foundation
 import SceneKit
 
 class GameShip {
@@ -6,7 +5,7 @@ class GameShip {
     private unowned let game: GameController
     private var xy: (Int, Int)
     private var direction: GameDirection
-    internal init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
+    init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
         let camera = scene.cameraNode
         camera.removeFromParentNode()
         node = GameShip.createNode(camera: camera)
@@ -52,7 +51,7 @@ class GameShip {
         return player
     }
 
-    internal func rotate(dir: RotateDirection) {
+    func rotate(dir: RotateDirection) {
         SCNTransaction.setAnimationDuration(0.5)
         switch(dir) {
         case .Left:
@@ -65,7 +64,7 @@ class GameShip {
         println("Ship is at \(xy) facing \(direction.rawValue)")
     }
 
-    internal func move(dir: MoveDirection) -> GameMoveResult {
+    func move(dir: MoveDirection) -> GameMoveResult {
         var moveDirection = dir == .Forward ? direction : direction.opposite
         var next = moveDirection.getNextPosition(xy)
         println("Ship next is at \(next)")
@@ -90,12 +89,12 @@ class GameShip {
         node.removeFromParentNode()
     }
 
-    internal enum RotateDirection {
+    enum RotateDirection {
         case Left
         case Right
     }
 
-    internal enum MoveDirection {
+    enum MoveDirection {
         case Forward
         case Backwards
     }

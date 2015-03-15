@@ -1,6 +1,4 @@
-import Foundation
-
-public enum GameItem {
+enum GameItem {
     case Wall
     case Player
     case Empty
@@ -8,7 +6,7 @@ public enum GameItem {
     case Exit
 }
 
-public extension GameItem {
+extension GameItem {
     var isWall: Bool {
         get {
             switch(self) {
