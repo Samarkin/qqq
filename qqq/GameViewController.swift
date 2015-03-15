@@ -9,57 +9,80 @@
 import SceneKit
 import QuartzCore
 
-class GameViewController: NSViewController {
-    
+class GameViewController: NSViewController, SCNSceneRendererDelegate {
     @IBOutlet weak var gameView: GameView!
+    var gameEngine: GameEngine!
     
     override func awakeFromNib(){
         // create a new scene
+        // TODO: load ship in GameShip, not here
         let scene = SCNScene(named: "art.scnassets/ship.dae")!
-        
+
         // create and add a camera to the scene
         let cameraNode = SCNNode()
+        cameraNode.name = "camera"
         cameraNode.camera = SCNCamera()
-        scene.rootNode.addChildNode(cameraNode)
-        
+
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        
+        cameraNode.position = SCNVector3(x: 0, y: 4, z: -15)
+        cameraNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
+
         // create and add a light to the scene
+        let light = SCNLight()
+        light.type = SCNLightTypeSpot
+        light.spotInnerAngle = 0.1
+        light.spotInnerAngle = 0.2
+        light.castsShadow = true
+        light.shadowColor = NSColor.blackColor()
+
         let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light!.type = SCNLightTypeOmni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        scene.rootNode.addChildNode(lightNode)
-        
+        lightNode.light = light
+        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
+        lightNode.position = SCNVector3(x: 0, y: 2, z: 0)
+
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = SCNLightTypeAmbient
-        ambientLightNode.light!.color = NSColor.darkGrayColor()
+        ambientLightNode.light!.color = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 0)
         scene.rootNode.addChildNode(ambientLightNode)
-        
+
         // retrieve the ship node
-        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
-        
-        // animate the 3d object
-        let animation = CABasicAnimation(keyPath: "rotation")
-        animation.toValue = NSValue(SCNVector4: SCNVector4(x: CGFloat(0), y: CGFloat(1), z: CGFloat(0), w: CGFloat(M_PI)*2))
-        animation.duration = 3
-        animation.repeatCount = MAXFLOAT //repeat forever
-        ship.addAnimation(animation, forKey: nil)
+        var shipNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
+
+        // group a player
+        shipNode.removeFromParentNode()
+        var player = SCNNode()
+        player.name = "player"
+        //player.pivot = SCNMatrix4MakeTranslation(0, 0, -7.5)
+        player.addChildNode(cameraNode)
+        player.addChildNode(shipNode)
+        player.addChildNode(lightNode)
+        scene.rootNode.addChildNode(player)
+
+        // add floor
+        let floorNode = SCNNode()
+        floorNode.geometry = SCNFloor() as SCNFloor
+        floorNode.position = SCNVector3(x: 0, y: -2, z: 0)
+        //scene.rootNode.addChildNode(floorNode)
+
+        // create engine
+        self.gameEngine = GameEngine(scene: scene)
 
         // set the scene to the view
         self.gameView!.scene = scene
-        
+
+        // add game engine
+        self.gameView!.delegate = self.gameEngine
+        self.gameView!.keyEventsHandler = self.gameEngine
+
         // allows the user to manipulate the camera
-        self.gameView!.allowsCameraControl = true
+        //self.gameView!.allowsCameraControl = true
         
         // show statistics such as fps and timing information
-        self.gameView!.showsStatistics = true
+        //self.gameView!.showsStatistics = true
         
         // configure the view
         self.gameView!.backgroundColor = NSColor.blackColor()
     }
-
 }
