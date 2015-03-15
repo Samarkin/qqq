@@ -1,5 +1,4 @@
-import Foundation
-import SceneKit
+import AppKit
 
 public protocol KeyEventsHandler: class {
     func keyDown(theEvent: NSEvent) -> Bool
@@ -11,21 +10,22 @@ public protocol GameController: class {
     func setItemAt(coordinates: (Int,Int), item: GameItem)
 }
 
-class GameEngine : NSObject, SCNSceneRendererDelegate, KeyEventsHandler, GameController {
-    private unowned let scene: SCNScene
-    private let ship: GameShip!
+public protocol GameProcessor: class {
+    func updateAtTime(time: NSTimeInterval)
+}
+
+class GameEngine : GameProcessor, KeyEventsHandler, GameController {
+    private let scene: GameScene
+    private var ship: GameShip?
     private var gameField: [[GameItem]]
     private var currentLevel: Int
     private var enemies: [GameEnemy]
 
-    init(scene: SCNScene) {
+    init(scene: GameScene) {
         self.scene = scene
-        var playerNode = scene.rootNode.childNodeWithName("player", recursively: false)!
         currentLevel = -1
         enemies = []
         gameField = [[]]
-        super.init()
-        ship = GameShip(playerNode: playerNode, withController: self)
         loadNextLevel()
     }
 
@@ -41,7 +41,6 @@ class GameEngine : NSObject, SCNSceneRendererDelegate, KeyEventsHandler, GameCon
     }
 
     private func loadNextLevel() {
-        // TODO: check result
         loadField(fromFile: levels[(++currentLevel)%levels.count])
     }
 
@@ -64,7 +63,7 @@ class GameEngine : NSObject, SCNSceneRendererDelegate, KeyEventsHandler, GameCon
         return [[.Player]]
     }
 
-    private func loadField(fromFile fileName: String) -> Bool {
+    private func loadField(fromFile fileName: String) {
         var field = getField(fromFile: fileName)
         enemies = []
         var x = -1, y = -1
@@ -72,44 +71,25 @@ class GameEngine : NSObject, SCNSceneRendererDelegate, KeyEventsHandler, GameCon
             for j in 0..<field[i].count {
                 switch (field[i][j]) {
                 case .Player:
+                    assert(x < 0, "Unable to load \(fileName). A field cannot contain more than one player")
                     x = i
                     y = j
                 case let .Enemy(direction):
-                    enemies.append(GameEnemy(onScene: self.scene, withController: self, atX: i, y: j, facing: direction, number: enemies.count))
+                    let enemy = GameEnemy(onScene: self.scene, withController: self, atX: i, y: j, facing: direction, number: enemies.count)
+                    enemies.append(enemy)
                 default:
                     break
                 }
             }
         }
-        if x < 0 {
-            return false
-        }
-        ship.reset(x, y, dir:.East)
+        assert(x >= 0, "Unable to load \(fileName). A field should contain player item")
+        ship = GameShip(onScene: scene, withController: self, atX: x, y: y, facing: .East)
         gameField = field
         GameLevel.loadField(field, toScene: self.scene)
-        return true
-    }
-
-    func keyDown(theEvent: NSEvent) -> Bool {
-        if theEvent.keyCode == 123 {
-            ship.rotate(.Left)
-            return true
-        } else if theEvent.keyCode == 124 {
-            ship.rotate(.Right)
-            return true
-        } else if theEvent.keyCode == 125 {
-            moveShip(.Backwards)
-            return true
-        } else if theEvent.keyCode == 126 {
-            moveShip(.Forward)
-            return true
-        } else {
-            return false
-        }
     }
 
     private func moveShip(dir: GameShip.MoveDirection) {
-        switch(ship.move(dir)) {
+        switch(ship?.move(dir) ?? .Success) {
         case .NextLevel:
             loadNextLevel()
         case .GameOver:
@@ -124,14 +104,29 @@ class GameEngine : NSObject, SCNSceneRendererDelegate, KeyEventsHandler, GameCon
         reloadLevel()
     }
 
+    func keyDown(theEvent: NSEvent) -> Bool {
+        if theEvent.keyCode == 123 {
+            ship?.rotate(.Left)
+            return true
+        } else if theEvent.keyCode == 124 {
+            ship?.rotate(.Right)
+            return true
+        } else if theEvent.keyCode == 125 {
+            moveShip(.Backwards)
+            return true
+        } else if theEvent.keyCode == 126 {
+            moveShip(.Forward)
+            return true
+        } else {
+            return false
+        }
+    }
+
     func keyUp(theEvent: NSEvent) -> Bool {
         return false
     }
 
-    func renderer(aRenderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: NSTimeInterval) {
-    }
-
-    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+    func updateAtTime(time: NSTimeInterval) {
         for enemy in enemies {
             switch(enemy.move(time)) {
             case .Success:

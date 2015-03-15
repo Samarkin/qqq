@@ -5,17 +5,18 @@ public class GameEnemy {
     private var node: SCNNode
     private unowned let game: GameController
     private var direction: GameDirection
-    private var x,y: Int
+    private var xy: (Int, Int)
     private var stepTime: NSTimeInterval = 1
     private var timeToMove = true
 
-    init(onScene scene: SCNScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection, number: Int) {
-        self.x = x
-        self.y = y
+    init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection, number: Int) {
+        xy = (x, y)
         direction = dir
         game = controller
-        node = GameEnemy.createNodeAt(x, y, dir:dir, bodyColor: colors[number%colors.count])
-        scene.rootNode.addChildNode(node)
+        node = GameEnemy.createNode(bodyColor: colors[number%colors.count])
+        node.rotation = dir.asRotationVector
+        node.moveTo((x,y))
+        scene.addChildNode(node)
     }
 
     private let colors = [
@@ -23,13 +24,14 @@ public class GameEnemy {
         NSColor.yellowColor(),
         NSColor.greenColor(),
         NSColor.blueColor(),
+        NSColor.orangeColor()
     ]
 
     public func move(time: NSTimeInterval) -> GameMoveResult {
         if (timeToMove) {
             timeToMove = false
-            let oldPosition = (x,y)
-            var nextPosition = direction.getNextPosition(x, y)
+            let oldPosition = xy
+            var nextPosition = direction.getNextPosition(xy)
             if game.itemAt(nextPosition).isPlayer {
                 return .GameOver
             }
@@ -38,9 +40,9 @@ public class GameEnemy {
             SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear))
             var move: Bool
             if game.itemAt(nextPosition).isEmpty {
-                (x,y) = nextPosition
-                game.setItemAt(nextPosition, item: .Enemy(direction))
-                node.position = SCNVector3(x: CGFloat(-x*10), y: CGFloat(3.0), z: CGFloat(y*10))
+                xy = nextPosition
+                game.setItemAt(xy, item: .Enemy(direction))
+                node.moveTo(xy)
                 move = true
             } else {
                 direction = direction.opposite
@@ -58,7 +60,7 @@ public class GameEnemy {
         return .Success
     }
 
-    private class func createNodeAt(x: Int, _ y: Int, dir: GameDirection, bodyColor: NSColor) -> SCNNode {
+    private class func createNode(#bodyColor: NSColor) -> SCNNode {
         var bodyMaterial = SCNMaterial()
         bodyMaterial.diffuse.contents = bodyColor
         bodyMaterial.emission.contents = bodyColor
@@ -89,8 +91,7 @@ public class GameEnemy {
         eye2.position = SCNVector3(x: 1, y: 1.5, z: 4.2)
         node.addChildNode(eye2)
 
-        node.rotation = dir.asRotationVector
-        node.position = SCNVector3(x: CGFloat(-x*10), y: CGFloat(3.0), z: CGFloat(y*10))
+        node.elevation = 3.0
         return node
     }
 

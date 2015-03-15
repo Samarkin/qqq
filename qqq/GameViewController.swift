@@ -15,50 +15,21 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
     
     override func awakeFromNib(){
         // create a new scene
-        // TODO: load ship in GameShip, not here
-        let scene = SCNScene(named: "art.scnassets/ship.dae")!
-
-        // create and add a camera to the scene
-        let cameraNode = SCNNode()
-        cameraNode.name = "camera"
-        cameraNode.camera = SCNCamera()
-
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 4, z: -15)
-        cameraNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
-
-        // create and add a light to the scene
-        let light = SCNLight()
-        light.type = SCNLightTypeSpot
-        light.spotInnerAngle = 0.1
-        light.spotInnerAngle = 0.2
-        light.castsShadow = true
-        light.shadowColor = NSColor.blackColor()
-
-        let lightNode = SCNNode()
-        lightNode.light = light
-        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
-        lightNode.position = SCNVector3(x: 0, y: 2, z: 0)
+        let scene = SCNScene()
 
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = SCNLightTypeAmbient
-        ambientLightNode.light!.color = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 0)
+        ambientLightNode.light!.color = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 1)
         scene.rootNode.addChildNode(ambientLightNode)
 
-        // retrieve the ship node
-        var shipNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
-
-        // group a player
-        shipNode.removeFromParentNode()
-        var player = SCNNode()
-        player.name = "player"
-        //player.pivot = SCNMatrix4MakeTranslation(0, 0, -7.5)
-        player.addChildNode(cameraNode)
-        player.addChildNode(shipNode)
-        player.addChildNode(lightNode)
-        scene.rootNode.addChildNode(player)
+        // create and add a camera to the scene
+        let cameraNode = SCNNode()
+        cameraNode.name = "camera"
+        cameraNode.camera = SCNCamera()
+        cameraNode.camera!.automaticallyAdjustsZRange = true
+        scene.rootNode.addChildNode(cameraNode)
 
         // add floor
         let floorNode = SCNNode()
@@ -67,13 +38,13 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
         //scene.rootNode.addChildNode(floorNode)
 
         // create engine
-        self.gameEngine = GameEngine(scene: scene)
+        self.gameEngine = GameEngine(scene: GameScene(native:scene))
 
         // set the scene to the view
         self.gameView!.scene = scene
 
         // add game engine
-        self.gameView!.delegate = self.gameEngine
+        self.gameView!.delegate = self
         self.gameView!.keyEventsHandler = self.gameEngine
 
         // allows the user to manipulate the camera
@@ -84,5 +55,9 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
         
         // configure the view
         self.gameView!.backgroundColor = NSColor.blackColor()
+    }
+
+    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        gameEngine.updateAtTime(time)
     }
 }

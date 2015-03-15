@@ -1,9 +1,11 @@
 import Foundation
 import SceneKit
 
-public extension GameDirection {
-    // x points to the north
-    // z points to the east
+// x points to the north
+// y points up
+// z points to the east
+
+extension GameDirection {
     var asRotationVector: SCNVector4 {
         get {
             switch(self) {
@@ -16,6 +18,21 @@ public extension GameDirection {
             case .West:
                 return SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
             }
+        }
+    }
+}
+
+extension SCNNode {
+    func moveTo(xy: (Int, Int)) {
+        self.position.x = CGFloat(-xy.0*10)
+        self.position.z = CGFloat(xy.1*10)
+    }
+    var elevation: CGFloat {
+        get {
+            return self.position.y
+        }
+        set {
+            self.position.y = newValue
         }
     }
 }
