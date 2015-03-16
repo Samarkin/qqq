@@ -1,11 +1,11 @@
-public enum GameDirection : Int8 {
+enum GameDirection : Int8 {
     case North = 0
     case East
     case South
     case West
 }
 
-public extension GameDirection {
+extension GameDirection {
     var opposite: GameDirection {
         get {
             return GameDirection(rawValue: (self.rawValue + 2)%4)!
