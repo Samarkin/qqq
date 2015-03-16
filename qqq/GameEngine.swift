@@ -1,8 +1,8 @@
-import AppKit
+import Foundation
 
 protocol KeyEventsDelegate: class {
-    func keyDown(theEvent: NSEvent) -> Bool
-    func keyUp(theEvent: NSEvent) -> Bool
+    func keyDown(keyCode: UInt16) -> Bool
+    func keyUp(keyCode: UInt16) -> Bool
 }
 
 protocol GameController: class {
@@ -104,17 +104,17 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         reloadLevel()
     }
 
-    func keyDown(theEvent: NSEvent) -> Bool {
-        if theEvent.keyCode == 123 {
+    func keyDown(keyCode: UInt16) -> Bool {
+        if keyCode == 123 {
             ship?.rotate(.Left)
             return true
-        } else if theEvent.keyCode == 124 {
+        } else if keyCode == 124 {
             ship?.rotate(.Right)
             return true
-        } else if theEvent.keyCode == 125 {
+        } else if keyCode == 125 {
             moveShip(.Backwards)
             return true
-        } else if theEvent.keyCode == 126 {
+        } else if keyCode == 126 {
             moveShip(.Forward)
             return true
         } else {
@@ -122,7 +122,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         }
     }
 
-    func keyUp(theEvent: NSEvent) -> Bool {
+    func keyUp(keyCode: UInt16) -> Bool {
         return false
     }
 
