@@ -30,10 +30,11 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     }
 
     private let levels = [
-        //"testLevel",
         "level0",
         "level1",
-        "level2"
+        "level2",
+        "level3",
+        "level4",
     ]
 
     private func reloadLevel() {
