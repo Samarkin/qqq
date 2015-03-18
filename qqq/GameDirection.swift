@@ -35,4 +35,18 @@ extension GameDirection {
             return (x, y-1)
         }
     }
+
+    func getNextPosition(xy: (Double, Double), offset: Double) -> (Double, Double) {
+        var (x,y) = xy
+        switch (self) {
+        case .North:
+            return (x-offset, y)
+        case .East:
+            return (x, y+offset)
+        case .South:
+            return (x+offset, y)
+        case .West:
+            return (x, y-offset)
+        }
+    }
 }

@@ -17,14 +17,17 @@ protocol GameProcessor: class {
 class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     private let scene: GameScene
     private var ship: GameShip?
+    private var gun: GameGun?
     private var gameField: [[GameItem]]
     private var currentLevel: Int
     private var enemies: [GameEnemy]
+    private var bullets: [GameBullet]
 
     init(scene: GameScene) {
         self.scene = scene
         currentLevel = -1
         enemies = []
+        bullets = []
         gameField = [[]]
         loadNextLevel()
     }
@@ -50,6 +53,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "X" : .Wall,
             "." : .Empty,
             "P" : .Player,
+            "O" : .Gun,
+            "o" : .Gun,
             ">" : .Enemy(.East),
             "<" : .Enemy(.West),
             "^" : .Enemy(.North),
@@ -78,6 +83,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 case let .Enemy(direction):
                     let enemy = GameEnemy(onScene: self.scene, withController: self, atX: i, y: j, facing: direction, number: enemies.count)
                     enemies.append(enemy)
+                case .Gun:
+                    gun = GameGun(onScene: self.scene, withController: self, atX: i, y: j)
                 default:
                     break
                 }
@@ -93,6 +100,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         switch(ship?.move(dir) ?? .Success) {
         case .NextLevel:
             loadNextLevel()
+        case .GunFound:
+            gun = nil
         case .GameOver:
             gameOver()
         case .Success:
@@ -118,6 +127,12 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         } else if keyCode == 126 {
             moveShip(.Forward)
             return true
+        } else if keyCode == 49 {
+            if let bullet = ship?.shoot() {
+                bullets.append(bullet)
+                return true
+            }
+            return false
         } else {
             return false
         }
@@ -138,6 +153,21 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             case .GameOver:
                 gameOver()
                 return
+            case .GunFound:
+                assertionFailure("Enemy's move cannot lead to .GunFound")
+            }
+        }
+        for (i,bullet) in enumerate(bullets) {
+            switch(bullet.move(time)) {
+            case .Success:
+                break
+            case .BulletBreaks:
+                println("Bullet dies")
+                bullets.removeAtIndex(i)
+            case let .EnemyKilled(x, y):
+                println("Enemy at \((x,y)) has been killed")
+                // TODO: find and kill enemy
+                bullets.removeAtIndex(i)
             }
         }
     }

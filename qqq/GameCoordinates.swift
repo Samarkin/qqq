@@ -26,6 +26,10 @@ extension SCNNode {
         self.position.x = CGFloat(-xy.0*10)
         self.position.z = CGFloat(xy.1*10)
     }
+    func moveTo(xy: (Double, Double)) {
+        self.position.x = CGFloat(-xy.0*10)
+        self.position.z = CGFloat(xy.1*10)
+    }
     var elevation: CGFloat {
         get {
             return self.position.y

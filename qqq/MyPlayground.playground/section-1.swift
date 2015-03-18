@@ -3,8 +3,13 @@
 //import Cocoa
 
 
-var x: Bool? = true
-
-x == true
-x == false
-x == nil
+var a = [1,2,3,4,5]
+for (i,x) in enumerate(a) {
+    "i = \(i), x = \(x)"
+    if x == 2 {
+        "deleting \(x)!"
+        a.removeAtIndex(i)
+    }
+    "i = \(i), x = \(x)"
+}
+a

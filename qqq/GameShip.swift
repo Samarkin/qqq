@@ -3,9 +3,12 @@ import SceneKit
 class GameShip {
     private let node: SCNNode
     private unowned let game: GameController
+    private unowned let scene: GameScene
     private var xy: (Int, Int)
     private var direction: GameDirection
+    private var hasGun = false
     init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
+        self.scene = scene
         let camera = scene.cameraNode
         camera.removeFromParentNode()
         node = GameShip.createNode(camera: camera)
@@ -76,6 +79,14 @@ class GameShip {
             node.moveTo(xy)
             game.setItemAt(xy, item: .Player)
             return .Success
+        case .Gun:
+            SCNTransaction.setAnimationDuration(0.5)
+            game.setItemAt(xy, item: .Empty)
+            xy = next
+            node.moveTo(xy)
+            game.setItemAt(xy, item: .Player)
+            hasGun = true
+            return .GunFound
         case .Enemy:
             return .GameOver
         case .Exit:
@@ -83,6 +94,14 @@ class GameShip {
         default:
             return .Success
         }
+    }
+
+    func shoot() -> GameBullet? {
+        if hasGun {
+            println("Shoot!")
+            return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
+        }
+        return nil
     }
 
     deinit {
