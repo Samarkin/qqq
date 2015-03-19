@@ -166,7 +166,12 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 bullets.removeAtIndex(i)
             case let .EnemyKilled(x, y):
                 println("Enemy at \((x,y)) has been killed")
-                // TODO: find and kill enemy
+                for (i,enemy) in enumerate(enemies) {
+                    if enemy.isAt(x: x, y: y) {
+                        enemies.removeAtIndex(i)
+                        break
+                    }
+                }
                 bullets.removeAtIndex(i)
             }
         }

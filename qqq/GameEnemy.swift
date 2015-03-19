@@ -2,8 +2,9 @@ import SceneKit
 
 class GameEnemy {
     private let node: SCNNode
-    private unowned let game: GameController
+    private weak var game: GameController!
     private var direction: GameDirection
+    private var oldXY: (Int, Int)?
     private var xy: (Int, Int)
     private let stepTime: NSTimeInterval = 1
     private var timeToMove = true
@@ -29,7 +30,6 @@ class GameEnemy {
     func move(time: NSTimeInterval) -> GameMoveResult {
         if (timeToMove) {
             timeToMove = false
-            let oldPosition = xy
             let nextPosition = direction.getNextPosition(xy)
             if game.itemAt(nextPosition).isPlayer {
                 return .GameOver
@@ -37,26 +37,30 @@ class GameEnemy {
             SCNTransaction.begin()
             SCNTransaction.setAnimationDuration(stepTime)
             SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear))
-            var move: Bool
             if game.itemAt(nextPosition).isEmpty {
+                oldXY = xy
                 xy = nextPosition
                 game.setItemAt(xy, item: .Enemy(direction))
                 node.moveTo(xy)
-                move = true
             } else {
                 direction = direction.opposite
                 node.rotation.w = node.rotation.w + CGFloat(M_PI)
-                move = false
+                oldXY = nil
             }
             SCNTransaction.setCompletionBlock { [weak self] in
-                if move {
-                    self?.game.setItemAt(oldPosition, item: .Empty)
+                if let oldxy = self?.oldXY {
+                    self?.game.setItemAt(oldxy, item: .Empty)
                 }
                 self?.timeToMove = true
             }
             SCNTransaction.commit()
         }
         return .Success
+    }
+
+    func isAt(#x: Int, y: Int) -> Bool {
+        return xy.0 == x && xy.1 == y
+            || oldXY?.0 == x && oldXY?.1 == y
     }
 
     private class func createNode(#bodyColor: NSColor) -> SCNNode {
@@ -95,6 +99,10 @@ class GameEnemy {
     }
 
     deinit {
+        game?.setItemAt(xy, item: .Empty)
+        if let oldxy = oldXY {
+            game?.setItemAt(oldxy, item: .Empty)
+        }
         node.removeFromParentNode()
     }
 }
