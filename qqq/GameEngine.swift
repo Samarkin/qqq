@@ -157,13 +157,14 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 assertionFailure("Enemy's move cannot lead to .GunFound")
             }
         }
+        var brokenBullets = [GameBullet]()
         for (i,bullet) in enumerate(bullets) {
             switch(bullet.move(time)) {
             case .Success:
                 break
             case .BulletBreaks:
                 println("Bullet dies")
-                bullets.removeAtIndex(i)
+                brokenBullets.append(bullet)
             case let .EnemyKilled(x, y):
                 println("Enemy at \((x,y)) has been killed")
                 for (i,enemy) in enumerate(enemies) {
@@ -172,8 +173,11 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                         break
                     }
                 }
-                bullets.removeAtIndex(i)
+                brokenBullets.append(bullet)
             }
+            }
+        bullets = bullets.filter { b in
+            brokenBullets.map { $0 !== b }.reduce(true, combine: &)
         }
     }
 
