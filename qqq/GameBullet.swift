@@ -16,7 +16,7 @@ class GameBullet {
     init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
         xy = (Double(x), Double(y))
         node = GameBullet.createNode()
-        node.rotation = dir.asRotationVector
+        node.rotateTo(dir)
         node.moveTo(xy)
         direction = dir
         game = controller

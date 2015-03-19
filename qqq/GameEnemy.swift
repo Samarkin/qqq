@@ -13,7 +13,7 @@ class GameEnemy {
         direction = dir
         game = controller
         node = GameEnemy.createNode(bodyColor: colors[number%colors.count])
-        node.rotation = dir.asRotationVector
+        node.rotateTo(dir)
         node.moveTo((x,y))
         scene.addChildNode(node)
     }

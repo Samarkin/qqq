@@ -18,7 +18,7 @@ class GameShip {
         xy = (x,y)
         node.moveTo(xy)
         direction = dir
-        node.rotation = dir.asRotationVector
+        node.rotateTo(dir)
     }
 
     private class func createNode(#camera: SCNNode?) -> SCNNode {
