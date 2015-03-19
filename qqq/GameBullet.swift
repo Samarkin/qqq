@@ -29,12 +29,21 @@ class GameBullet {
         gunMaterial.diffuse.contents = NSColor.greenColor()
         gunMaterial.emission.contents = NSColor.greenColor()
         gunMaterial.emission.intensity = 0.1
-        let bulletNode = SCNNode()
-        bulletNode.geometry = SCNCylinder(radius: 0.1, height: 1)
-        bulletNode.geometry!.materials = [gunMaterial]
-        bulletNode.rotation = SCNVector4(x: 1, y: 0, z: 0, w: CGFloat(M_PI_2))
+        let bulletNode1 = SCNNode()
+        bulletNode1.geometry = SCNCylinder(radius: 0.1, height: 1)
+        bulletNode1.geometry!.materials = [gunMaterial]
+        bulletNode1.moveTo((-0.25,0))
+        bulletNode1.elevation = -0.5
+        bulletNode1.rotation = SCNVector4(x: 1, y: 0, z: 0, w: CGFloat(M_PI_2))
+        let bulletNode2 = SCNNode()
+        bulletNode2.geometry = SCNCylinder(radius: 0.1, height: 1)
+        bulletNode2.geometry!.materials = [gunMaterial]
+        bulletNode2.moveTo((0.25,0))
+        bulletNode2.elevation = -0.5
+        bulletNode2.rotation = SCNVector4(x: 1, y: 0, z: 0, w: CGFloat(M_PI_2))
         let node = SCNNode()
-        node.addChildNode(bulletNode)
+        node.addChildNode(bulletNode1)
+        node.addChildNode(bulletNode2)
         return node
     }
 
