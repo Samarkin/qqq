@@ -30,6 +30,7 @@
 		A6C50A1D1A39846A00B4F353 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6C50A1C1A39846A00B4F353 /* Images.xcassets */; };
 		A6C50A201A39846A00B4F353 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6C50A1E1A39846A00B4F353 /* MainMenu.xib */; };
 		A6C50A2C1A39846A00B4F353 /* qqqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C50A2B1A39846A00B4F353 /* qqqTests.swift */; };
+		A6F468BF1ABF4CC000FF0670 /* GameBootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468BE1ABF4CC000FF0670 /* GameBootstrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		A6C50A251A39846A00B4F353 /* qqqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qqqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6C50A2A1A39846A00B4F353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6C50A2B1A39846A00B4F353 /* qqqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = qqqTests.swift; sourceTree = "<group>"; };
+		A6F468BE1ABF4CC000FF0670 /* GameBootstrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBootstrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				A66231C71AB6401A00EFDE81 /* GameScene.swift */,
 				A6B910411AB9360C00C2446B /* GameGun.swift */,
 				A6B910431AB93C4F00C2446B /* GameBullet.swift */,
+				A6F468BE1ABF4CC000FF0670 /* GameBootstrapper.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				A66231C81AB6401A00EFDE81 /* GameScene.swift in Sources */,
 				A66231C41AB5722500EFDE81 /* GameCoordinates.swift in Sources */,
 				A6C50A191A39846A00B4F353 /* GameViewController.swift in Sources */,
+				A6F468BF1ABF4CC000FF0670 /* GameBootstrapper.swift in Sources */,
 				A66231BA1AB53C9900EFDE81 /* GameItem.swift in Sources */,
 				A66231B81AB53C7200EFDE81 /* GameLevel.swift in Sources */,
 				A6C50A151A39846A00B4F353 /* AppDelegate.swift in Sources */,
