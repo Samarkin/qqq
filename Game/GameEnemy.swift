@@ -20,11 +20,11 @@ class GameEnemy {
     }
 
     private let colors = [
-        NSColor.redColor(),
-        NSColor.yellowColor(),
-        NSColor.greenColor(),
-        NSColor.blueColor(),
-        NSColor.orangeColor()
+        GameColor.redColor(),
+        GameColor.yellowColor(),
+        GameColor.greenColor(),
+        GameColor.blueColor(),
+        GameColor.orangeColor()
     ]
 
     func move(time: NSTimeInterval) -> GameMoveResult {
@@ -44,7 +44,7 @@ class GameEnemy {
                 node.moveTo(xy)
             } else {
                 direction = direction.opposite
-                node.rotation.w = node.rotation.w + CGFloat(M_PI)
+                node.rotation.w = node.rotation.w + GameFloat(M_PI)
                 oldXY = nil
             }
             SCNTransaction.setCompletionBlock { [weak self] in
@@ -63,14 +63,14 @@ class GameEnemy {
             || oldXY?.0 == x && oldXY?.1 == y
     }
 
-    private class func createNode(#bodyColor: NSColor) -> SCNNode {
+    private class func createNode(#bodyColor: GameColor) -> SCNNode {
         let bodyMaterial = SCNMaterial()
         bodyMaterial.diffuse.contents = bodyColor
         bodyMaterial.emission.contents = bodyColor
         bodyMaterial.emission.intensity = 1
         let eyeMaterial = SCNMaterial()
-        eyeMaterial.diffuse.contents = NSColor.whiteColor()
-        eyeMaterial.emission.contents = NSColor.whiteColor()
+        eyeMaterial.diffuse.contents = GameColor.whiteColor()
+        eyeMaterial.emission.contents = GameColor.whiteColor()
         eyeMaterial.emission.intensity = 1
         let light = SCNLight()
         light.type = SCNLightTypeOmni

@@ -28,7 +28,7 @@ class GameShip {
         SCNTransaction.setAnimationDuration(0)
         // place the camera
         camera?.position = SCNVector3(x: 0, y: 4, z: -15)
-        camera?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
+        camera?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
 
         // create and add a light to the scene
         let light = SCNLight()
@@ -36,11 +36,11 @@ class GameShip {
         light.spotInnerAngle = 0.1
         light.spotInnerAngle = 0.2
         light.castsShadow = true
-        light.shadowColor = NSColor.blackColor()
+        light.shadowColor = GameColor.blackColor()
 
         let lightNode = SCNNode()
         lightNode.light = light
-        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: CGFloat(M_PI))
+        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
         lightNode.position = SCNVector3(x: 0, y: 2, z: 0)
 
         // group a player
@@ -59,10 +59,10 @@ class GameShip {
         switch(dir) {
         case .Left:
             direction = direction.left
-            node.rotation.w += CGFloat(M_PI_2)
+            node.rotation.w += GameFloat(M_PI_2)
         case .Right:
             direction = direction.right
-            node.rotation.w -= CGFloat(M_PI_2)
+            node.rotation.w -= GameFloat(M_PI_2)
         }
         println("Ship is at \(xy) facing \(direction.rawValue)")
     }

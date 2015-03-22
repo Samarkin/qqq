@@ -8,7 +8,7 @@ class GameBootstrapper {
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = SCNLightTypeAmbient
-        ambientLightNode.light!.color = NSColor(calibratedRed: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+        ambientLightNode.light!.color = GameColor(red:0.2, green: 0.2, blue: 0.2, alpha: 1)
         scene.rootNode.addChildNode(ambientLightNode)
 
         // create and add a camera to the scene
