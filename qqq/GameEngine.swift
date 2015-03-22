@@ -1,8 +1,12 @@
 import Foundation
 
+enum Key {
+    case Left, Right, Forward, Backwards, Action
+}
+
 protocol KeyEventsDelegate: class {
-    func keyDown(keyCode: UInt16) -> Bool
-    func keyUp(keyCode: UInt16) -> Bool
+    func keyDown(key: Key) -> Bool
+    func keyUp(key: Key) -> Bool
 }
 
 protocol GameController: class {
@@ -114,31 +118,30 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         reloadLevel()
     }
 
-    func keyDown(keyCode: UInt16) -> Bool {
-        if keyCode == 123 {
+    func keyDown(key: Key) -> Bool {
+        switch(key) {
+        case .Left:
             ship?.rotate(.Left)
             return true
-        } else if keyCode == 124 {
+        case .Right:
             ship?.rotate(.Right)
             return true
-        } else if keyCode == 125 {
+        case .Backwards:
             moveShip(.Backwards)
             return true
-        } else if keyCode == 126 {
+        case .Forward:
             moveShip(.Forward)
             return true
-        } else if keyCode == 49 {
+        case .Action:
             if let bullet = ship?.shoot() {
                 bullets.append(bullet)
                 return true
             }
             return false
-        } else {
-            return false
         }
     }
 
-    func keyUp(keyCode: UInt16) -> Bool {
+    func keyUp(key: Key) -> Bool {
         return false
     }
 
