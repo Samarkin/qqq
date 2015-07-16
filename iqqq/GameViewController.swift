@@ -15,7 +15,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         self.gameEngine = GameEngine(scene: GameScene(native: scene))
 
         // retrieve the SCNView
-        let scnView = self.view as SCNView
+        let scnView = self.view as! SCNView
         
         // set the scene to the view
         scnView.scene = scene
@@ -37,7 +37,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         upSwipeGesture.direction = UISwipeGestureRecognizerDirection.Up
         let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleDownSwipe:")
         downSwipeGesture.direction = UISwipeGestureRecognizerDirection.Down
-        var gestureRecognizers: [AnyObject] =
+        var gestureRecognizers: [UIGestureRecognizer] =
         [
             tapGesture,
             rightSwipeGesture,
@@ -79,11 +79,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         return true
     }
 
-    override func supportedInterfaceOrientations() -> Int {
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+            return UIInterfaceOrientationMask.AllButUpsideDown
         } else {
-            return Int(UIInterfaceOrientationMask.All.rawValue)
+            return UIInterfaceOrientationMask.All
         }
     }
 

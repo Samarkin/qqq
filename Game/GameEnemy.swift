@@ -58,12 +58,12 @@ class GameEnemy {
         return .Success
     }
 
-    func isAt(#x: Int, y: Int) -> Bool {
+    func isAt(x x: Int, y: Int) -> Bool {
         return xy.0 == x && xy.1 == y
             || oldXY?.0 == x && oldXY?.1 == y
     }
 
-    private class func createNode(#bodyColor: GameColor) -> SCNNode {
+    private class func createNode(bodyColor bodyColor: GameColor) -> SCNNode {
         let bodyMaterial = SCNMaterial()
         bodyMaterial.diffuse.contents = bodyColor
         bodyMaterial.emission.contents = bodyColor

@@ -66,9 +66,12 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "V" : .Enemy(.South)
         ]
         if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: "") {
-            var err: NSErrorPointer = nil
-            var x = String(contentsOfFile: path, encoding: NSASCIIStringEncoding, error: err) ?? "P"
-            return map(x.componentsSeparatedByString("\n")) { map($0.generate()) { translation[$0] ?? .Empty } }
+            do {
+                let x = try String(contentsOfFile: path, encoding: NSASCIIStringEncoding)
+                return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
+            }
+            catch {
+            }
         }
         return [[.Player]]
     }
@@ -161,16 +164,16 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             }
         }
         var brokenBullets = [GameBullet]()
-        for (i,bullet) in enumerate(bullets) {
+        for (_,bullet) in bullets.enumerate() {
             switch(bullet.move(time)) {
             case .Success:
                 break
             case .BulletBreaks:
-                println("Bullet dies")
+                print("Bullet dies")
                 brokenBullets.append(bullet)
             case let .EnemyKilled(x, y):
-                println("Enemy at \((x,y)) has been killed")
-                for (i,enemy) in enumerate(enemies) {
+                print("Enemy at \((x,y)) has been killed")
+                for (i,enemy) in enemies.enumerate() {
                     if enemy.isAt(x: x, y: y) {
                         enemies.removeAtIndex(i)
                         break
@@ -178,9 +181,9 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 }
                 brokenBullets.append(bullet)
             }
-            }
+        }
         bullets = bullets.filter { b in
-            brokenBullets.map { $0 !== b }.reduce(true, combine: &)
+            brokenBullets.map { $0 !== b }.reduce(true, combine: {$0 && $1})
         }
     }
 

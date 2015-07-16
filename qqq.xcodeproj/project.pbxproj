@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A654FC141B578B5100D668BF /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = A6C50A1A1A39846A00B4F353 /* art.scnassets */; };
 		A6C50A151A39846A00B4F353 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C50A141A39846A00B4F353 /* AppDelegate.swift */; };
 		A6C50A171A39846A00B4F353 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C50A161A39846A00B4F353 /* GameView.swift */; };
 		A6C50A191A39846A00B4F353 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C50A181A39846A00B4F353 /* GameViewController.swift */; };
@@ -82,7 +83,7 @@
 		A6C50A141A39846A00B4F353 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6C50A161A39846A00B4F353 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		A6C50A181A39846A00B4F353 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
-		A6C50A1A1A39846A00B4F353 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		A6C50A1A1A39846A00B4F353 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; name = art.scnassets; path = ../qqq/art.scnassets; sourceTree = "<group>"; };
 		A6C50A1C1A39846A00B4F353 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A6C50A1F1A39846A00B4F353 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A6C50A251A39846A00B4F353 /* qqqTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qqqTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,7 +182,6 @@
 				A6C50A141A39846A00B4F353 /* AppDelegate.swift */,
 				A6C50A161A39846A00B4F353 /* GameView.swift */,
 				A6C50A181A39846A00B4F353 /* GameViewController.swift */,
-				A6C50A1A1A39846A00B4F353 /* art.scnassets */,
 				A6C50A1C1A39846A00B4F353 /* Images.xcassets */,
 				A6C50A1E1A39846A00B4F353 /* MainMenu.xib */,
 				A6C50A121A39846A00B4F353 /* Supporting Files */,
@@ -269,6 +269,7 @@
 				A6F469071ABF6CAD00FF0670 /* GameMoveResult.swift */,
 				A6F469081ABF6CAD00FF0670 /* GameScene.swift */,
 				A6F469091ABF6CAD00FF0670 /* GameShip.swift */,
+				A6C50A1A1A39846A00B4F353 /* art.scnassets */,
 				A6F4690A1ABF6CAD00FF0670 /* level0 */,
 				A6F4690B1ABF6CAD00FF0670 /* level1 */,
 				A6F4690C1ABF6CAD00FF0670 /* level2 */,
@@ -357,7 +358,9 @@
 		A6C50A071A39846A00B4F353 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Pavel Samarkin";
 				TargetAttributes = {
 					A6C50A0E1A39846A00B4F353 = {
@@ -425,6 +428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6F4692A1ABF6CAE00FF0670 /* level1 in Resources */,
+				A654FC141B578B5100D668BF /* art.scnassets in Resources */,
 				A6F4692E1ABF6CAE00FF0670 /* level3 in Resources */,
 				A6F469301ABF6CAE00FF0670 /* level4 in Resources */,
 				A6F468D51ABF4E1000FF0670 /* LaunchScreen.xib in Resources */,
@@ -569,6 +573,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -583,7 +588,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -620,7 +626,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -633,6 +640,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = qqq/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -644,6 +652,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = qqq/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -663,6 +672,7 @@
 				);
 				INFOPLIST_FILE = qqqTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/qqq.app/Contents/MacOS/qqq";
 			};
@@ -679,6 +689,7 @@
 				);
 				INFOPLIST_FILE = qqqTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/qqq.app/Contents/MacOS/qqq";
 			};
@@ -694,8 +705,8 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = iqqq/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -709,8 +720,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = iqqq/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -733,6 +744,7 @@
 				INFOPLIST_FILE = iqqqTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iqqq.app/iqqq";
@@ -751,6 +763,7 @@
 				INFOPLIST_FILE = iqqqTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.samarkin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iqqq.app/iqqq";
@@ -795,6 +808,7 @@
 				A6F468E41ABF4E1100FF0670 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A6F468E51ABF4E1100FF0670 /* Build configuration list for PBXNativeTarget "iqqqTests" */ = {
 			isa = XCConfigurationList;
@@ -803,6 +817,7 @@
 				A6F468E71ABF4E1100FF0670 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

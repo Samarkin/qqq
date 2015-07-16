@@ -12,7 +12,7 @@ class GameLevel {
             for j in 0..<field[i].count {
                 if field[i][j].isWall {
                     // add a box
-                    var box = createNode()
+                    let box = createNode()
                     box.moveTo((i,j))
                     boxes.append(box)
                     scene.addChildNode(box)

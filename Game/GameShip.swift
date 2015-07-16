@@ -21,7 +21,7 @@ class GameShip {
         node.rotateTo(dir)
     }
 
-    private class func createNode(#camera: SCNNode?) -> SCNNode {
+    private class func createNode(camera camera: SCNNode?) -> SCNNode {
         let scene = SCNScene(named: "art.scnassets/ship.dae")!
         let shipNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
 
@@ -44,7 +44,7 @@ class GameShip {
         lightNode.position = SCNVector3(x: 0, y: 2, z: 0)
 
         // group a player
-        var player = SCNNode()
+        let player = SCNNode()
         player.name = "player"
         if let c = camera { player.addChildNode(c) }
         player.addChildNode(shipNode)
@@ -64,13 +64,13 @@ class GameShip {
             direction = direction.right
             node.rotation.w -= GameFloat(M_PI_2)
         }
-        println("Ship is at \(xy) facing \(direction.rawValue)")
+        print("Ship is at \(xy) facing \(direction.rawValue)")
     }
 
     func move(dir: MoveDirection) -> GameMoveResult {
-        var moveDirection = dir == .Forward ? direction : direction.opposite
-        var next = moveDirection.getNextPosition(xy)
-        println("Ship next is at \(next)")
+        let moveDirection = dir == .Forward ? direction : direction.opposite
+        let next = moveDirection.getNextPosition(xy)
+        print("Ship next is at \(next)")
         switch(game.itemAt(next)) {
         case .Empty:
             SCNTransaction.setAnimationDuration(0.5)
@@ -98,7 +98,7 @@ class GameShip {
 
     func shoot() -> GameBullet? {
         if hasGun {
-            println("Shoot!")
+            print("Shoot!")
             return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
         }
         return nil
