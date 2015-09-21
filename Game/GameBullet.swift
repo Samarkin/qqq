@@ -47,21 +47,20 @@ class GameBullet {
     }
 
     func move(time: NSTimeInterval) -> GameBulletMoveResult {
-        if let oldTime = lastMove {
+        guard let oldTime = lastMove else {
             lastMove = time
-            xy = direction.getNextPosition(xy, offset: (time-oldTime)*cellsPerSecond)
-            node.moveTo(xy)
-            let nextPosition = (Int(xy.0), Int(xy.1))
-            switch(game.itemAt(nextPosition)) {
-            case .Wall, .Exit:
-                return .BulletBreaks
-            case .Enemy:
-                return .EnemyKilled(nextPosition)
-            case .Empty, .Gun, .Player:
-                return .Success
-            }
-        } else {
-            lastMove = time
+            return .Success
+        }
+        lastMove = time
+        xy = direction.getNextPosition(xy, offset: (time-oldTime)*cellsPerSecond)
+        node.moveTo(xy)
+        let nextPosition = (Int(xy.0), Int(xy.1))
+        switch(game.itemAt(nextPosition)) {
+        case .Wall, .Exit:
+            return .BulletBreaks
+        case .Enemy:
+            return .EnemyKilled(nextPosition)
+        case .Empty, .Gun, .Player:
             return .Success
         }
     }

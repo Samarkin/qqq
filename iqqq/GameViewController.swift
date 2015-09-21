@@ -46,7 +46,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             downSwipeGesture
         ]
         if let existingGestureRecognizers = scnView.gestureRecognizers {
-            gestureRecognizers.extend(existingGestureRecognizers)
+            gestureRecognizers.appendContentsOf(existingGestureRecognizers)
         }
         scnView.gestureRecognizers = gestureRecognizers
     }

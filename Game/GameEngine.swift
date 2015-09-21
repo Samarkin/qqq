@@ -66,23 +66,19 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "V" : .Enemy(.South)
         ]
         if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: "") {
-            do {
-                let x = try String(contentsOfFile: path, encoding: NSASCIIStringEncoding)
-                return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
-            }
-            catch {
-            }
+            let x = (try? String(contentsOfFile: path, encoding: NSASCIIStringEncoding)) ?? "P"
+            return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
         }
         return [[.Player]]
     }
 
     private func loadField(fromFile fileName: String) {
-        var field = getField(fromFile: fileName)
+        let field = getField(fromFile: fileName)
         enemies = []
         var x = -1, y = -1
-        for i in 0..<field.count {
-            for j in 0..<field[i].count {
-                switch (field[i][j]) {
+        for (i,line) in field.enumerate() {
+            for (j,cell) in line.enumerate() {
+                switch (cell) {
                 case .Player:
                     assert(x < 0, "Unable to load \(fileName). A field cannot contain more than one player")
                     x = i
@@ -104,14 +100,14 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     }
 
     private func moveShip(dir: GameShip.MoveDirection) {
-        switch(ship?.move(dir) ?? .Success) {
-        case .NextLevel:
+        switch(ship?.move(dir)) {
+        case .Some(.NextLevel):
             loadNextLevel()
-        case .GunFound:
+        case .Some(.GunFound):
             gun = nil
-        case .GameOver:
+        case .Some(.GameOver):
             gameOver()
-        case .Success:
+        case .Some(.Success), .None:
             break
         }
     }
@@ -164,7 +160,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             }
         }
         var brokenBullets = [GameBullet]()
-        for (_,bullet) in bullets.enumerate() {
+        for bullet in bullets {
             switch(bullet.move(time)) {
             case .Success:
                 break
@@ -173,22 +169,19 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 brokenBullets.append(bullet)
             case let .EnemyKilled(x, y):
                 print("Enemy at \((x,y)) has been killed")
-                for (i,enemy) in enemies.enumerate() {
-                    if enemy.isAt(x: x, y: y) {
-                        enemies.removeAtIndex(i)
-                        break
-                    }
+                if let deadEnemyIndex = enemies.indexOf({$0.isAt(x: x, y: y)}) {
+                    enemies.removeAtIndex(deadEnemyIndex)
                 }
                 brokenBullets.append(bullet)
             }
         }
         bullets = bullets.filter { b in
-            brokenBullets.map { $0 !== b }.reduce(true, combine: {$0 && $1})
+            !brokenBullets.contains { $0 === b }
         }
     }
 
     func itemAt(coordinates: (Int, Int)) -> GameItem {
-        if coordinates.0 < 0 || coordinates.0 >= gameField.count || coordinates.1 < 0 || coordinates.1 >= gameField[coordinates.0].count {
+        guard coordinates.0 >= 0 && coordinates.0 < gameField.count && coordinates.1 >= 0 && coordinates.1 < gameField[coordinates.0].count else {
             return .Exit
         }
         return gameField[coordinates.0][coordinates.1]

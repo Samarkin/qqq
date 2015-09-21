@@ -28,33 +28,34 @@ class GameEnemy {
     ]
 
     func move(time: NSTimeInterval) -> GameMoveResult {
-        if (timeToMove) {
-            timeToMove = false
-            let nextPosition = direction.getNextPosition(xy)
-            if game.itemAt(nextPosition).isPlayer {
-                return .GameOver
-            }
-            SCNTransaction.begin()
-            SCNTransaction.setAnimationDuration(stepTime)
-            SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear))
-            if game.itemAt(nextPosition).isEmpty {
-                oldXY = xy
-                xy = nextPosition
-                game.setItemAt(xy, item: .Enemy(direction))
-                node.moveTo(xy)
-            } else {
-                direction = direction.opposite
-                node.rotation.w = node.rotation.w + GameFloat(M_PI)
-                oldXY = nil
-            }
-            SCNTransaction.setCompletionBlock { [weak self] in
-                if let oldxy = self?.oldXY {
-                    self?.game.setItemAt(oldxy, item: .Empty)
-                }
-                self?.timeToMove = true
-            }
-            SCNTransaction.commit()
+        guard timeToMove else {
+            return .Success
         }
+        timeToMove = false
+        let nextPosition = direction.getNextPosition(xy)
+        if game.itemAt(nextPosition).isPlayer {
+            return .GameOver
+        }
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(stepTime)
+        SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear))
+        if game.itemAt(nextPosition).isEmpty {
+            oldXY = xy
+            xy = nextPosition
+            game.setItemAt(xy, item: .Enemy(direction))
+            node.moveTo(xy)
+        } else {
+            direction = direction.opposite
+            node.rotation.w = node.rotation.w + GameFloat(M_PI)
+            oldXY = nil
+        }
+        SCNTransaction.setCompletionBlock { [weak self] in
+            if let oldxy = self?.oldXY {
+                self?.game.setItemAt(oldxy, item: .Empty)
+            }
+            self?.timeToMove = true
+        }
+        SCNTransaction.commit()
         return .Success
     }
 

@@ -97,11 +97,11 @@ class GameShip {
     }
 
     func shoot() -> GameBullet? {
-        if hasGun {
-            print("Shoot!")
-            return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
+        guard hasGun else {
+            return nil
         }
-        return nil
+        print("Shoot!")
+        return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
     }
 
     deinit {
