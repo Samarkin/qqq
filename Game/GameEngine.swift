@@ -69,7 +69,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         ]
         if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: ""),
             x = try? String(contentsOfFile: path, encoding: NSASCIIStringEncoding) {
-            return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
+                return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
         }
         return [[.Player]]
     }
@@ -102,6 +102,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         ship = GameShip(onScene: scene, withController: self, atX: x, y: y, facing: .East)
         gameField = field
         GameLevel.loadField(field, toScene: self.scene)
+        updateOverlay()
     }
 
     private func moveShip(dir: GameShip.MoveDirection) {
@@ -110,10 +111,17 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             loadNextLevel()
         case .Some(.GunFound):
             gun = nil
+            updateOverlay()
         case .Some(.GameOver):
             gameOver()
         case .Some(.Success), .None:
             break
+        }
+    }
+
+    private func updateOverlay() {
+        if let ship = ship {
+            overlay.setBullets(ship.bullets)
         }
     }
 
@@ -138,6 +146,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             return true
         case .Action:
             if let bullet = ship?.shoot() {
+                updateOverlay()
                 bullets.append(bullet)
                 return true
             }
@@ -185,6 +194,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         bullets = bullets.filter { b in
             !brokenBullets.contains { $0 === b }
         }
+        updateOverlay()
     }
 
     func itemAt(coordinates: (Int, Int)) -> GameItem {
