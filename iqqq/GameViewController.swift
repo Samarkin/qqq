@@ -9,7 +9,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         super.viewDidLoad()
 
         // create a new scene
-        let scene = GameBootstrapper.prepareScene()
+        let scene = GameSceneImpl()
 
         // retrieve the SCNView
         let scnView = self.view as! SCNView
@@ -18,7 +18,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         let overlay = GameSpriteKitOverlay(size: scnView.bounds.size)
 
         // create engine
-        self.gameEngine = GameEngine(scene: GameScene(native: scene), overlay: overlay)
+        self.gameEngine = GameEngine(scene: scene, overlay: overlay)
 
         // set the scene to the view
         scnView.scene = scene

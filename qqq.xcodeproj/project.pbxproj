@@ -25,8 +25,6 @@
 		A6F468E11ABF4E1100FF0670 /* iqqqTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468E01ABF4E1100FF0670 /* iqqqTests.swift */; };
 		A6F468FA1ABF6B7A00FF0670 /* Multiplatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468F91ABF6B7A00FF0670 /* Multiplatform.swift */; };
 		A6F468FC1ABF6BD200FF0670 /* Multiplatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468FB1ABF6BD200FF0670 /* Multiplatform.swift */; };
-		A6F4690F1ABF6CAE00FF0670 /* GameBootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468FE1ABF6CAD00FF0670 /* GameBootstrapper.swift */; };
-		A6F469101ABF6CAE00FF0670 /* GameBootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468FE1ABF6CAD00FF0670 /* GameBootstrapper.swift */; };
 		A6F469111ABF6CAE00FF0670 /* GameBullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468FF1ABF6CAD00FF0670 /* GameBullet.swift */; };
 		A6F469121ABF6CAE00FF0670 /* GameBullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F468FF1ABF6CAD00FF0670 /* GameBullet.swift */; };
 		A6F469131ABF6CAE00FF0670 /* GameCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F469001ABF6CAD00FF0670 /* GameCoordinates.swift */; };
@@ -104,7 +102,6 @@
 		A6F468E01ABF4E1100FF0670 /* iqqqTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iqqqTests.swift; sourceTree = "<group>"; };
 		A6F468F91ABF6B7A00FF0670 /* Multiplatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Multiplatform.swift; sourceTree = "<group>"; };
 		A6F468FB1ABF6BD200FF0670 /* Multiplatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Multiplatform.swift; sourceTree = "<group>"; };
-		A6F468FE1ABF6CAD00FF0670 /* GameBootstrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBootstrapper.swift; sourceTree = "<group>"; };
 		A6F468FF1ABF6CAD00FF0670 /* GameBullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBullet.swift; sourceTree = "<group>"; };
 		A6F469001ABF6CAD00FF0670 /* GameCoordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoordinates.swift; sourceTree = "<group>"; };
 		A6F469011ABF6CAD00FF0670 /* GameDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDirection.swift; sourceTree = "<group>"; };
@@ -260,7 +257,6 @@
 		A6F468FD1ABF6CAD00FF0670 /* Game */ = {
 			isa = PBXGroup;
 			children = (
-				A6F468FE1ABF6CAD00FF0670 /* GameBootstrapper.swift */,
 				A6F468FF1ABF6CAD00FF0670 /* GameBullet.swift */,
 				A6F469001ABF6CAD00FF0670 /* GameCoordinates.swift */,
 				A6F469011ABF6CAD00FF0670 /* GameDirection.swift */,
@@ -461,7 +457,6 @@
 				A6C50A171A39846A00B4F353 /* GameView.swift in Sources */,
 				A6F469151ABF6CAE00FF0670 /* GameDirection.swift in Sources */,
 				A6F4691D1ABF6CAE00FF0670 /* GameItem.swift in Sources */,
-				A6F4690F1ABF6CAE00FF0670 /* GameBootstrapper.swift in Sources */,
 				A6F469171ABF6CAE00FF0670 /* GameEnemy.swift in Sources */,
 				A6F469211ABF6CAE00FF0670 /* GameMoveResult.swift in Sources */,
 				A6F469251ABF6CAE00FF0670 /* GameShip.swift in Sources */,
@@ -490,7 +485,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6F469261ABF6CAE00FF0670 /* GameShip.swift in Sources */,
-				A6F469101ABF6CAE00FF0670 /* GameBootstrapper.swift in Sources */,
 				A6F4691E1ABF6CAE00FF0670 /* GameItem.swift in Sources */,
 				A6F469221ABF6CAE00FF0670 /* GameMoveResult.swift in Sources */,
 				A6F468FA1ABF6B7A00FF0670 /* Multiplatform.swift in Sources */,

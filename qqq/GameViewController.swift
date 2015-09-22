@@ -7,14 +7,14 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
     
     override func awakeFromNib(){
         // create a new scene
-        let scene = GameBootstrapper.prepareScene()
+        let scene = GameSceneImpl()
 
         // create overlay
         let overlay = GameSpriteKitOverlay(size: self.gameView.bounds.size)
         self.gameView.overlaySKScene = overlay
 
         // create engine
-        self.gameEngine = GameEngine(scene: GameScene(native:scene), overlay: overlay)
+        self.gameEngine = GameEngine(scene: scene, overlay: overlay)
 
         // set the scene to the view
         self.gameView.scene = scene
