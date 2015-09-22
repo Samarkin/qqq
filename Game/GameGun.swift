@@ -19,7 +19,7 @@ class GameGun {
 
         let margin: GameFloat = 0.1
         let angleStep = 2*GameFloat(M_PI)/GameFloat(bullets)
-        let radius = (2*cylinder.radius + margin) / (2 * sin(angleStep/2))
+        let radius = (2*GameFloat(cylinder.radius) + margin) / (2 * sin(angleStep/2))
         for i in 0..<bullets {
             let node = SCNNode()
             node.geometry = cylinder
