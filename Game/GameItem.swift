@@ -2,7 +2,7 @@ enum GameItem {
     case Wall
     case Player
     case Empty
-    case Gun
+    case Gun(Int)
     case Enemy(GameDirection)
     case Exit
 }

@@ -6,7 +6,8 @@ class GameShip {
     private unowned let scene: GameScene
     private var xy: (Int, Int)
     private var direction: GameDirection
-    private var hasGun = false
+    private(set) var bullets = Int.min
+
     init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
         self.scene = scene
         let camera = scene.cameraNode
@@ -79,13 +80,13 @@ class GameShip {
             node.moveTo(xy)
             game.setItemAt(xy, item: .Player)
             return .Success
-        case .Gun:
+        case .Gun(let bullets):
             SCNTransaction.setAnimationDuration(0.5)
             game.setItemAt(xy, item: .Empty)
             xy = next
             node.moveTo(xy)
             game.setItemAt(xy, item: .Player)
-            hasGun = true
+            self.bullets = bullets
             return .GunFound
         case .Enemy:
             return .GameOver
@@ -97,11 +98,16 @@ class GameShip {
     }
 
     func shoot() -> GameBullet? {
-        guard hasGun else {
+        guard bullets >= 2 else {
             return nil
         }
+        bullets -= 2
         print("Shoot!")
         return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
+    }
+
+    func bulletDies() {
+        bullets += 2
     }
 
     deinit {

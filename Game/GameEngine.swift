@@ -59,8 +59,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "X" : .Wall,
             "." : .Empty,
             "P" : .Player,
-            "O" : .Gun,
-            "o" : .Gun,
+            "O" : .Gun(6),
+            "o" : .Gun(2),
             ">" : .Enemy(.East),
             "<" : .Enemy(.West),
             "^" : .Enemy(.North),
@@ -78,6 +78,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         overlay.setLevel(fileName)
         let field = getField(fromFile: fileName)
         enemies = []
+        gun = nil
         var x = -1, y = -1
         for (i,line) in field.enumerate() {
             for (j,cell) in line.enumerate() {
@@ -89,8 +90,9 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 case let .Enemy(direction):
                     let enemy = GameEnemy(onScene: self.scene, withController: self, atX: i, y: j, facing: direction, number: enemies.count)
                     enemies.append(enemy)
-                case .Gun:
-                    gun = GameGun(onScene: self.scene, withController: self, atX: i, y: j)
+                case let .Gun(bullets):
+                    assert(gun == nil, "Unable to load \(fileName). A field cannot contain more than one gun")
+                    gun = GameGun(onScene: self.scene, withController: self, atX: i, y: j, bullets: bullets)
                 default:
                     break
                 }
@@ -170,12 +172,14 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             case .BulletBreaks:
                 print("Bullet dies")
                 brokenBullets.append(bullet)
+                ship?.bulletDies()
             case let .EnemyKilled(x, y):
                 print("Enemy at \((x,y)) has been killed")
                 if let deadEnemyIndex = enemies.indexOf({$0.isAt(x: x, y: y)}) {
                     enemies.removeAtIndex(deadEnemyIndex)
                 }
                 brokenBullets.append(bullet)
+                ship?.bulletDies()
             }
         }
         bullets = bullets.filter { b in
