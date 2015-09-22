@@ -17,17 +17,17 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
         self.gameEngine = GameEngine(scene: GameScene(native:scene), overlay: overlay)
 
         // set the scene to the view
-        self.gameView!.scene = scene
+        self.gameView.scene = scene
 
         // add game engine
-        self.gameView!.delegate = self
-        self.gameView!.keyEventsDelegate = self.gameEngine
+        self.gameView.delegate = self
+        self.gameView.keyEventsDelegate = self.gameEngine
 
         // show statistics such as fps and timing information
-        //self.gameView!.showsStatistics = true
+        //self.gameView.showsStatistics = true
 
         // configure the view
-        self.gameView!.backgroundColor = NSColor.blackColor()
+        self.gameView.backgroundColor = NSColor.blackColor()
     }
 
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {

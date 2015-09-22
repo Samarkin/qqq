@@ -21,14 +21,14 @@ class GameShip {
         node.rotateTo(dir)
     }
 
-    private class func createNode(camera camera: SCNNode?) -> SCNNode {
+    private class func createNode(camera camera: SCNNode) -> SCNNode {
         let scene = SCNScene(named: "art.scnassets/ship.dae")!
         let shipNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
 
         SCNTransaction.setAnimationDuration(0)
         // place the camera
-        camera?.position = SCNVector3(x: 0, y: 4, z: -15)
-        camera?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
+        camera.position = SCNVector3(x: 0, y: 4, z: -15)
+        camera.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
 
         // create and add a light to the scene
         let light = SCNLight()
@@ -46,7 +46,7 @@ class GameShip {
         // group a player
         let player = SCNNode()
         player.name = "player"
-        if let c = camera { player.addChildNode(c) }
+        player.addChildNode(camera)
         player.addChildNode(shipNode)
         player.addChildNode(lightNode)
         player.elevation = 0.0

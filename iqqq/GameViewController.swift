@@ -7,7 +7,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // create a new scene
         let scene = GameBootstrapper.prepareScene()
 
@@ -19,18 +19,18 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 
         // create engine
         self.gameEngine = GameEngine(scene: GameScene(native: scene), overlay: overlay)
-        
+
         // set the scene to the view
         scnView.scene = scene
         scnView.delegate = self
         scnView.overlaySKScene = overlay
-        
+
         // show statistics such as fps and timing information
         scnView.showsStatistics = true
-        
+
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
-        
+
         // add gesture recognizers
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
         let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleRightSwipe:")

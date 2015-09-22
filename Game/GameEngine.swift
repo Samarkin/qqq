@@ -67,8 +67,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "v" : .Enemy(.South),
             "V" : .Enemy(.South)
         ]
-        if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: "") {
-            let x = (try? String(contentsOfFile: path, encoding: NSASCIIStringEncoding)) ?? "P"
+        if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: ""),
+            x = try? String(contentsOfFile: path, encoding: NSASCIIStringEncoding) {
             return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
         }
         return [[.Player]]

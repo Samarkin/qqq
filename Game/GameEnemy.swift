@@ -50,8 +50,8 @@ class GameEnemy {
             oldXY = nil
         }
         SCNTransaction.setCompletionBlock { [weak self] in
-            if let oldxy = self?.oldXY {
-                self?.game.setItemAt(oldxy, item: .Empty)
+            if let me = self, oldxy = me.oldXY {
+                me.game.setItemAt(oldxy, item: .Empty)
             }
             self?.timeToMove = true
         }
@@ -78,20 +78,23 @@ class GameEnemy {
         light.attenuationStartDistance = 5.0
         light.attenuationEndDistance = 15.0
         light.color = bodyColor
+        let bodySphere = SCNSphere(radius: 5)
+        bodySphere.materials = [bodyMaterial]
         let node = SCNNode()
-        node.geometry = SCNSphere(radius: 5)
-        node.geometry!.materials = [bodyMaterial]
+        node.geometry = bodySphere
         node.light = light
 
+        let eyeSphere = SCNSphere(radius: 1)
+        eyeSphere.materials = [eyeMaterial]
         let eye = SCNNode()
-        eye.geometry = SCNSphere(radius: 1)
-        eye.geometry?.materials = [eyeMaterial]
+        eye.geometry = eyeSphere
         eye.position = SCNVector3(x: -1, y: 1.5, z: 4.2)
         node.addChildNode(eye)
 
+        let eyeSphere2 = SCNSphere(radius: 1)
+        eyeSphere2.materials = [eyeMaterial]
         let eye2 = SCNNode()
-        eye2.geometry = SCNSphere(radius: 1)
-        eye2.geometry!.materials = [eyeMaterial]
+        eye2.geometry = eyeSphere2
         eye2.position = SCNVector3(x: 1, y: 1.5, z: 4.2)
         node.addChildNode(eye2)
 

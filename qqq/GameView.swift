@@ -12,16 +12,16 @@ class GameView: SCNView {
     ]
 
     override func keyDown(theEvent: NSEvent) {
-        let key = keymap[theEvent.keyCode]
-        if key == nil || keyEventsDelegate?.keyDown(key!) != true {
+        guard let key = keymap[theEvent.keyCode] where keyEventsDelegate?.keyDown(key) == true else {
             super.keyDown(theEvent)
+            return
         }
     }
 
     override func keyUp(theEvent: NSEvent) {
-        let key = keymap[theEvent.keyCode]
-        if key == nil || keyEventsDelegate?.keyUp(key!) != true {
+        guard let key = keymap[theEvent.keyCode] where keyEventsDelegate?.keyUp(key) == true else {
             super.keyUp(theEvent)
+            return
         }
     }
 

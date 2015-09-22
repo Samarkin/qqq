@@ -28,15 +28,17 @@ class GameBullet {
         gunMaterial.diffuse.contents = GameColor.greenColor()
         gunMaterial.emission.contents = GameColor.greenColor()
         gunMaterial.emission.intensity = 0.1
+        let cylinder1 = SCNCylinder(radius: 0.1, height: 1)
+        cylinder1.materials = [gunMaterial]
         let bulletNode1 = SCNNode()
-        bulletNode1.geometry = SCNCylinder(radius: 0.1, height: 1)
-        bulletNode1.geometry!.materials = [gunMaterial]
+        bulletNode1.geometry = cylinder1
         bulletNode1.moveTo((-0.25,0))
         bulletNode1.elevation = -0.5
         bulletNode1.rotation = SCNVector4(x: 1, y: 0, z: 0, w: GameFloat(M_PI_2))
+        let cylinder2 = SCNCylinder(radius: 0.1, height: 1)
+        cylinder2.materials = [gunMaterial]
         let bulletNode2 = SCNNode()
-        bulletNode2.geometry = SCNCylinder(radius: 0.1, height: 1)
-        bulletNode2.geometry!.materials = [gunMaterial]
+        bulletNode2.geometry = cylinder2
         bulletNode2.moveTo((0.25,0))
         bulletNode2.elevation = -0.5
         bulletNode2.rotation = SCNVector4(x: 1, y: 0, z: 0, w: GameFloat(M_PI_2))

@@ -13,9 +13,10 @@ class GameGun {
         gunMaterial.diffuse.contents = GameColor.greenColor()
         gunMaterial.emission.contents = GameColor.greenColor()
         gunMaterial.emission.intensity = 0.1
+        let cylinder = SCNCylinder(radius: 0.8, height: 6)
+        cylinder.materials = [gunMaterial]
         let node = SCNNode()
-        node.geometry = SCNCylinder(radius: 0.8, height: 6)
-        node.geometry!.materials = [gunMaterial]
+        node.geometry = cylinder
         node.rotation = SCNVector4(x: 1, y: 0, z: 0, w: GameFloat(M_PI_2))
         let rotateAction = SCNAction.rotateByAngle(CGFloat(M_PI), aroundAxis: SCNVector3(x: 0, y: 1, z: 0), duration: 1)
         node.runAction(SCNAction.repeatActionForever(rotateAction))
