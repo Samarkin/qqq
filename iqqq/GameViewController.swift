@@ -11,15 +11,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         // create a new scene
         let scene = GameBootstrapper.prepareScene()
 
-        // create engine
-        self.gameEngine = GameEngine(scene: GameScene(native: scene))
-
         // retrieve the SCNView
         let scnView = self.view as! SCNView
+
+        // create overlay
+        let overlay = GameSpriteKitOverlay(size: scnView.bounds.size)
+
+        // create engine
+        self.gameEngine = GameEngine(scene: GameScene(native: scene), overlay: overlay)
         
         // set the scene to the view
         scnView.scene = scene
         scnView.delegate = self
+        scnView.overlaySKScene = overlay
         
         // show statistics such as fps and timing information
         scnView.showsStatistics = true

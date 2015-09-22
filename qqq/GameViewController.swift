@@ -1,4 +1,5 @@
 import SceneKit
+import SpriteKit
 
 class GameViewController: NSViewController, SCNSceneRendererDelegate {
     @IBOutlet weak var gameView: GameView!
@@ -8,8 +9,12 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
         // create a new scene
         let scene = GameBootstrapper.prepareScene()
 
+        // create overlay
+        let overlay = GameSpriteKitOverlay(size: self.gameView.bounds.size)
+        self.gameView.overlaySKScene = overlay
+
         // create engine
-        self.gameEngine = GameEngine(scene: GameScene(native:scene))
+        self.gameEngine = GameEngine(scene: GameScene(native:scene), overlay: overlay)
 
         // set the scene to the view
         self.gameView!.scene = scene

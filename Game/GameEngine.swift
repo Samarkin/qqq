@@ -20,6 +20,7 @@ protocol GameProcessor: class {
 
 class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     private let scene: GameScene
+    private let overlay: GameOverlay
     private var ship: GameShip?
     private var gun: GameGun?
     private var gameField: [[GameItem]]
@@ -27,8 +28,9 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     private var enemies: [GameEnemy]
     private var bullets: [GameBullet]
 
-    init(scene: GameScene) {
+    init(scene: GameScene, overlay: GameOverlay) {
         self.scene = scene
+        self.overlay = overlay
         currentLevel = -1
         enemies = []
         bullets = []
@@ -73,6 +75,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     }
 
     private func loadField(fromFile fileName: String) {
+        overlay.setLevel(fileName)
         let field = getField(fromFile: fileName)
         enemies = []
         var x = -1, y = -1
