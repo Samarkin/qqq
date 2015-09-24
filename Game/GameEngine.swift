@@ -10,8 +10,8 @@ protocol KeyEventsDelegate: class {
 }
 
 protocol GameController: class {
-    func itemAt(coordinates: (Int,Int)) -> GameItem
-    func setItemAt(coordinates: (Int,Int), item: GameItem)
+    func itemAt(coordinates: (x: Int, y: Int)) -> GameItem
+    func setItemAt(coordinates: (x: Int, y: Int), item: GameItem)
 }
 
 protocol GameProcessor: class {
@@ -206,14 +206,14 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         updateOverlay()
     }
 
-    func itemAt(coordinates: (Int, Int)) -> GameItem {
-        guard coordinates.0 >= 0 && coordinates.0 < gameField.count && coordinates.1 >= 0 && coordinates.1 < gameField[coordinates.0].count else {
+    func itemAt(coordinates: (x: Int, y: Int)) -> GameItem {
+        guard 0..<gameField.count ~= coordinates.x && 0..<gameField[coordinates.x].count ~= coordinates.y else {
             return .Exit
         }
-        return gameField[coordinates.0][coordinates.1]
+        return gameField[coordinates.x][coordinates.y]
     }
 
-    func setItemAt(coordinates: (Int, Int), item: GameItem) {
-        gameField[coordinates.0][coordinates.1] = item
+    func setItemAt(coordinates: (x: Int, y: Int), item: GameItem) {
+        gameField[coordinates.x][coordinates.y] = item
     }
 }

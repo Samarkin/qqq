@@ -11,7 +11,7 @@ class GameBullet {
     private unowned let game: GameController
     private let direction: GameDirection
     private let node: SCNNode
-    private var xy: (Double, Double)
+    private var xy: (x: Double, y: Double)
     private var lastMove: NSTimeInterval?
     init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection) {
         xy = (Double(x), Double(y))
@@ -56,7 +56,7 @@ class GameBullet {
         lastMove = time
         xy = direction.getNextPosition(xy, offset: (time-oldTime)*cellsPerSecond)
         node.moveTo(xy)
-        let nextPosition = (Int(xy.0), Int(xy.1))
+        let nextPosition = (Int(xy.x), Int(xy.y))
         switch(game.itemAt(nextPosition)) {
         case .Wall, .Exit:
             return .BulletBreaks

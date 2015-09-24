@@ -5,13 +5,13 @@ import SceneKit
 // z points to the east
 
 extension SCNNode {
-    func moveTo(xy: (Int, Int)) {
-        self.position.x = GameFloat(-xy.0*10)
-        self.position.z = GameFloat(xy.1*10)
+    func moveTo(xy: (x: Int, y: Int)) {
+        self.position.x = GameFloat(-xy.x*10)
+        self.position.z = GameFloat(xy.y*10)
     }
-    func moveTo(xy: (Double, Double)) {
-        self.position.x = GameFloat(-xy.0*10)
-        self.position.z = GameFloat(xy.1*10)
+    func moveTo(xy: (x: Double, y: Double)) {
+        self.position.x = GameFloat(-xy.x*10)
+        self.position.z = GameFloat(xy.y*10)
     }
     func rotateTo(dir: GameDirection) {
         switch(dir) {

@@ -4,7 +4,7 @@ class GameShip {
     private let node: SCNNode
     private unowned let game: GameController
     private unowned let scene: GameScene
-    private var xy: (Int, Int)
+    private var xy: (x: Int, y: Int)
     private var direction: GameDirection
     private(set) var bullets = Int.min
 
@@ -103,7 +103,7 @@ class GameShip {
         }
         bullets -= 2
         print("Shoot!")
-        return GameBullet(onScene: self.scene, withController: self.game, atX: xy.0, y: xy.1, facing: direction)
+        return GameBullet(onScene: self.scene, withController: self.game, atX: xy.x, y: xy.y, facing: direction)
     }
 
     func bulletDies() {

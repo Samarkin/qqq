@@ -4,8 +4,8 @@ class GameEnemy {
     private let node: SCNNode
     private weak var game: GameController!
     private var direction: GameDirection
-    private var oldXY: (Int, Int)?
-    private var xy: (Int, Int)
+    private var oldXY: (x: Int, y: Int)?
+    private var xy: (x: Int, y: Int)
     private let stepTime: NSTimeInterval = 1
     private var timeToMove = true
 
@@ -60,8 +60,8 @@ class GameEnemy {
     }
 
     func isAt(x x: Int, y: Int) -> Bool {
-        return xy.0 == x && xy.1 == y
-            || oldXY?.0 == x && oldXY?.1 == y
+        return xy.x == x && xy.y == y
+            || oldXY?.x == x && oldXY?.y == y
     }
 
     private class func createNode(bodyColor bodyColor: GameColor) -> SCNNode {
