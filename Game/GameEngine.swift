@@ -28,6 +28,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     private var enemies: [GameEnemy]
     private var bullets: [GameBullet]
 
+    private var freeze = false
+
     init(scene: GameScene, overlay: GameOverlay) {
         self.scene = scene
         self.overlay = overlay
@@ -127,10 +129,17 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
 
     private func gameOver() {
         print("You're dead!")
-        reloadLevel()
+        freeze = true
+        overlay.gameOver {
+            self.reloadLevel()
+            self.freeze = false
+        }
     }
 
     func keyDown(key: Key) -> Bool {
+        guard !freeze else {
+            return false
+        }
         switch(key) {
         case .Left:
             ship?.rotate(.Left)

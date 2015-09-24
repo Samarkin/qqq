@@ -3,6 +3,7 @@ import SpriteKit
 protocol GameOverlay {
     func setLevel(name: String)
     func setBullets(count: Int)
+    func gameOver(readyToSwitch: () -> Void)
 }
 
 private func createLabel(color color: GameColor) -> SKLabelNode {
@@ -42,6 +43,27 @@ class GameSpriteKitOverlay: SKScene, GameOverlay {
         }
         bulletLabel.text = "Bullets: \(count)"
         bulletLabel.position = CGPoint(x: self.size.width - bulletLabel.frame.width, y: self.size.height - bulletLabel.frame.height)
+    }
+
+    func gameOver(readyToSwitch: () -> Void) {
+        let text = SKLabelNode(fontNamed: "Helvetica")
+        text.fontSize = 114
+        text.fontColor = .greenColor()
+        text.text = "You're dead!"
+        text.horizontalAlignmentMode = .Center
+        text.position = CGPoint(x: self.size.width/2, y: self.size.height/2 - text.frame.height/2)
+        text.xScale = 0.01
+        text.yScale = 0.01
+
+        self.addChild(text)
+        let scaleAction = SKAction.scaleTo(1, duration: 0.5)
+        text.runAction(scaleAction) {
+            readyToSwitch()
+            let hideAction = SKAction.fadeAlphaTo(0, duration: 1)
+            text.runAction(hideAction) {
+                text.removeFromParent()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
