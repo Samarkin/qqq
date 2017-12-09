@@ -22,7 +22,7 @@ extension GameDirection {
         }
     }
 
-    func getNextPosition(xy: (Int, Int)) -> (Int, Int) {
+    func getNextPosition(_ xy: (Int, Int)) -> (Int, Int) {
         let (x,y) = xy
         switch (self) {
         case .North:
@@ -36,7 +36,7 @@ extension GameDirection {
         }
     }
 
-    func getNextPosition(xy: (Double, Double), offset: Double) -> (Double, Double) {
+    func getNextPosition(_ xy: (Double, Double), offset: Double) -> (Double, Double) {
         let (x,y) = xy
         switch (self) {
         case .North:

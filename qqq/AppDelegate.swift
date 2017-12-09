@@ -6,11 +6,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        window.backgroundColor = .blackColor()
+        window.backgroundColor = .black
         // Insert code here to initialize your application
     }
 
-    func applicationShouldTerminateAfterLastWindowClosed(theApplication: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
 }

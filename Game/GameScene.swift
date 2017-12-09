@@ -1,7 +1,7 @@
 import SceneKit
 
 protocol GameScene : class {
-    func addChildNode(node: SCNNode)
+    func addChildNode(_ node: SCNNode)
     var cameraNode: SCNNode { get }
 }
 
@@ -10,7 +10,7 @@ class GameSceneImpl : SCNScene, GameScene {
         super.init()
         // create and add an ambient light to the scene
         let light = SCNLight()
-        light.type = SCNLightTypeAmbient
+        light.type = .ambient
         light.color = GameColor(red:0.2, green: 0.2, blue: 0.2, alpha: 1)
         let ambientLightNode = SCNNode()
         ambientLightNode.light = light
@@ -36,13 +36,13 @@ class GameSceneImpl : SCNScene, GameScene {
         return nil
     }
 
-    func addChildNode(node: SCNNode) {
+    func addChildNode(_ node: SCNNode) {
         rootNode.addChildNode(node)
     }
 
     var cameraNode: SCNNode {
         get {
-            return rootNode.childNodeWithName("camera", recursively: true)!
+            return rootNode.childNode(withName: "camera", recursively: true)!
         }
     }
 }

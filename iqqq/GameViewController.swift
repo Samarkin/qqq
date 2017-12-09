@@ -29,18 +29,18 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         scnView.showsStatistics = true
 
         // configure the view
-        scnView.backgroundColor = UIColor.blackColor()
+        scnView.backgroundColor = .black
 
         // add gesture recognizers
-        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
-        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleRightSwipe:")
-        rightSwipeGesture.direction = UISwipeGestureRecognizerDirection.Right
-        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleLeftSwipe:")
-        leftSwipeGesture.direction = UISwipeGestureRecognizerDirection.Left
-        let upSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleUpSwipe:")
-        upSwipeGesture.direction = UISwipeGestureRecognizerDirection.Up
-        let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: "handleDownSwipe:")
-        downSwipeGesture.direction = UISwipeGestureRecognizerDirection.Down
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleRightSwipe))
+        rightSwipeGesture.direction = .right
+        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleLeftSwipe))
+        leftSwipeGesture.direction = .left
+        let upSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleUpSwipe))
+        upSwipeGesture.direction = .up
+        let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleDownSwipe))
+        downSwipeGesture.direction = .down
         var gestureRecognizers: [UIGestureRecognizer] =
         [
             tapGesture,
@@ -50,44 +50,42 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             downSwipeGesture
         ]
         if let existingGestureRecognizers = scnView.gestureRecognizers {
-            gestureRecognizers.appendContentsOf(existingGestureRecognizers)
+            gestureRecognizers.append(contentsOf: existingGestureRecognizers)
         }
         scnView.gestureRecognizers = gestureRecognizers
     }
     
-    func handleTap(gestureRecognize: UIGestureRecognizer) {
-        gameEngine.keyDown(.Action)
+    @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+        _ = gameEngine.keyDown(.Action)
     }
 
-    func handleLeftSwipe(gestureRecognize: UIGestureRecognizer) {
-        gameEngine.keyDown(.Left)
+    @objc func handleLeftSwipe(_ gestureRecognize: UIGestureRecognizer) {
+        _ = gameEngine.keyDown(.Left)
     }
 
-    func handleRightSwipe(gestureRecognize: UIGestureRecognizer) {
-        gameEngine.keyDown(.Right)
+    @objc func handleRightSwipe(_ gestureRecognize: UIGestureRecognizer) {
+        _ = gameEngine.keyDown(.Right)
     }
 
-    func handleUpSwipe(gestureRecognize: UIGestureRecognizer) {
-        gameEngine.keyDown(.Forward)
+    @objc func handleUpSwipe(_ gestureRecognize: UIGestureRecognizer) {
+        _ = gameEngine.keyDown(.Forward)
     }
 
-    func handleDownSwipe(gestureRecognize: UIGestureRecognizer) {
-        gameEngine.keyDown(.Backwards)
+    @objc func handleDownSwipe(_ gestureRecognize: UIGestureRecognizer) {
+        _ = gameEngine.keyDown(.Backwards)
     }
 
-    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        gameEngine.updateAtTime(time)
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        gameEngine.update(at: time)
     }
 
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+    override var prefersStatusBarHidden: Bool { return true }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return UIInterfaceOrientationMask.AllButUpsideDown
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
         } else {
-            return UIInterfaceOrientationMask.All
+            return .all
         }
     }
 

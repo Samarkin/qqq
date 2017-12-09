@@ -27,10 +27,10 @@ class GameViewController: NSViewController, SCNSceneRendererDelegate {
         //self.gameView.showsStatistics = true
 
         // configure the view
-        self.gameView.backgroundColor = NSColor.blackColor()
+        self.gameView.backgroundColor = .black
     }
 
-    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        gameEngine.updateAtTime(time)
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        gameEngine.update(at: time)
     }
 }

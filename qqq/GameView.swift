@@ -11,20 +11,20 @@ class GameView: SCNView {
         49: .Action // Spacebar
     ]
 
-    override func keyDown(theEvent: NSEvent) {
+    override func keyDown(with theEvent: NSEvent) {
         guard let key = keymap[theEvent.keyCode] else {
-            super.keyDown(theEvent)
+            super.keyDown(with: theEvent)
             return
         }
-        keyEventsDelegate?.keyDown(key)
+        _ = keyEventsDelegate?.keyDown(key)
     }
 
-    override func keyUp(theEvent: NSEvent) {
+    override func keyUp(with theEvent: NSEvent) {
         guard let key = keymap[theEvent.keyCode] else {
-            super.keyUp(theEvent)
+            super.keyUp(with: theEvent)
             return
         }
-        keyEventsDelegate?.keyUp(key)
+        _ = keyEventsDelegate?.keyUp(key)
     }
 
     

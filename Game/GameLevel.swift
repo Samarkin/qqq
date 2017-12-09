@@ -3,7 +3,7 @@ import SceneKit
 private var boxes: [SCNNode] = []
 
 class GameLevel {
-    class func loadField(field: [[GameItem]], toScene scene: GameScene) {
+    class func load(field: [[GameItem]], toScene scene: GameScene) {
         for box in boxes {
             box.removeFromParentNode()
         }
@@ -13,7 +13,7 @@ class GameLevel {
                 if field[i][j].isWall {
                     // add a box
                     let box = createNode()
-                    box.moveTo((i,j))
+                    box.move(to: (i,j))
                     boxes.append(box)
                     scene.addChildNode(box)
                 }
@@ -31,11 +31,11 @@ class GameLevel {
     }
 
     private class func getHoverAction() -> SCNAction {
-        let h = Double(random())/Double(RAND_MAX)
-        let moveUp = SCNAction.moveByX(0.0, y: CGFloat(random()%5 - 5), z: 0.0, duration: 0.5+h)
-        moveUp.timingMode = .EaseInEaseOut
-        let moveDown = moveUp.reversedAction()
-        moveDown.timingMode = .EaseInEaseOut
-        return SCNAction.repeatActionForever(SCNAction.sequence([moveUp, moveDown]))
+        let h = Double(arc4random())/Double(UInt32.max)
+        let moveUp = SCNAction.moveBy(x: 0.0, y: CGFloat(arc4random()%3) - 3, z: 0.0, duration: 0.5+h)
+        moveUp.timingMode = .easeInEaseOut
+        let moveDown = moveUp.reversed()
+        moveDown.timingMode = .easeInEaseOut
+        return SCNAction.repeatForever(SCNAction.sequence([moveUp, moveDown]))
     }
 }

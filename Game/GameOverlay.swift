@@ -1,12 +1,12 @@
 import SpriteKit
 
-protocol GameOverlay {
-    func setLevel(name: String)
-    func setBullets(count: Int)
-    func gameOver(readyToSwitch: () -> Void)
+protocol GameOverlay: class {
+    var levelName: String? { get set }
+    var bulletCount: Int { get set }
+    func gameOver(readyToSwitch: @escaping () -> Void)
 }
 
-private func createLabel(color color: GameColor) -> SKLabelNode {
+private func createLabel(color: GameColor) -> SKLabelNode {
     let label = SKLabelNode(fontNamed: "Helvetica")
     label.fontSize = 15
     label.fontColor = color
@@ -18,9 +18,11 @@ class GameSpriteKitOverlay: SKScene, GameOverlay {
     private let bulletLabel: SKLabelNode
 
     override init(size: CGSize) {
-        levelLabel = createLabel(color: .redColor())
-        bulletLabel = createLabel(color: .greenColor())
-        bulletLabel.horizontalAlignmentMode = .Left
+        levelLabel = createLabel(color: .red)
+        levelName = nil
+        bulletLabel = createLabel(color: .green)
+        bulletLabel.horizontalAlignmentMode = .left
+        bulletCount = 0
 
         super.init(size: size)
 
@@ -28,47 +30,57 @@ class GameSpriteKitOverlay: SKScene, GameOverlay {
         self.addChild(bulletLabel)
 
         //automatically resize to fill the viewport
-        self.scaleMode = .AspectFit
+        self.scaleMode = .aspectFit
     }
 
-    func setLevel(name: String) {
-        levelLabel.text = "Level: \(name)"
-        levelLabel.position = CGPoint(x: levelLabel.frame.width/2, y: self.size.height - levelLabel.frame.height)
-    }
-
-    func setBullets(count: Int) {
-        guard count >= 0 else {
-            bulletLabel.text = ""
-            return
+    var levelName: String? {
+        didSet {
+            guard let levelName = levelName else {
+                levelLabel.text = ""
+                return
+            }
+            levelLabel.text = "Level: \(levelName)"
+            levelLabel.position = CGPoint(x: levelLabel.frame.width/2, y: self.size.height - levelLabel.frame.height)
         }
-        bulletLabel.text = "Bullets: \(count)"
-        bulletLabel.position = CGPoint(x: self.size.width - bulletLabel.frame.width, y: self.size.height - bulletLabel.frame.height)
     }
 
-    func gameOver(readyToSwitch: () -> Void) {
+    var bulletCount: Int {
+        didSet {
+            guard bulletCount >= 0 else {
+                bulletLabel.text = ""
+                return
+            }
+            bulletLabel.text = "Bullets: \(bulletCount)"
+            bulletLabel.position = CGPoint(x: self.size.width - bulletLabel.frame.width, y: self.size.height - bulletLabel.frame.height)
+        }
+    }
+
+    func gameOver(readyToSwitch: @escaping () -> Void) {
         let text = SKLabelNode(fontNamed: "Helvetica")
         text.fontSize = 114
-        text.fontColor = .greenColor()
+        text.fontColor = .green
         text.text = "You're dead!"
-        text.horizontalAlignmentMode = .Center
+        text.horizontalAlignmentMode = .center
         text.position = CGPoint(x: self.size.width/2, y: self.size.height/2 - text.frame.height/2)
         text.xScale = 0.01
         text.yScale = 0.01
 
         self.addChild(text)
-        let scaleAction = SKAction.scaleTo(1, duration: 0.5)
-        text.runAction(scaleAction) {
+        let scaleAction = SKAction.scale(to: 1, duration: 0.5)
+        text.run(scaleAction) {
             readyToSwitch()
-            let hideAction = SKAction.fadeAlphaTo(0, duration: 1)
-            text.runAction(hideAction) {
+            let hideAction = SKAction.fadeAlpha(to: 0, duration: 1)
+            text.run(hideAction) {
                 text.removeFromParent()
             }
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
-        levelLabel = createLabel(color: .redColor())
-        bulletLabel = createLabel(color: .greenColor())
+        levelLabel = createLabel(color: .red)
+        levelName = nil
+        bulletLabel = createLabel(color: .green)
+        bulletCount = 0
         super.init(coder: aDecoder)
         return nil
     }

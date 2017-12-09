@@ -5,17 +5,16 @@ enum Key {
 }
 
 protocol KeyEventsDelegate: class {
-    func keyDown(key: Key) -> Bool
-    func keyUp(key: Key) -> Bool
+    func keyDown(_ key: Key) -> Bool
+    func keyUp(_ key: Key) -> Bool
 }
 
 protocol GameController: class {
-    func itemAt(coordinates: (Int,Int)) -> GameItem
-    func setItemAt(coordinates: (Int,Int), item: GameItem)
+    subscript(_ coordinates: (Int,Int)) -> GameItem { get set }
 }
 
 protocol GameProcessor: class {
-    func updateAtTime(time: NSTimeInterval)
+    func update(at time: TimeInterval)
 }
 
 class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
@@ -53,7 +52,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
     }
 
     private func loadNextLevel() {
-        loadField(fromFile: levels[(++currentLevel)%levels.count])
+        currentLevel += 1
+        loadField(fromFile: levels[currentLevel%levels.count])
     }
 
     private func getField(fromFile fileName: String) -> [[GameItem]] {
@@ -69,21 +69,21 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
             "v" : .Enemy(.South),
             "V" : .Enemy(.South)
         ]
-        if let path = NSBundle.mainBundle().pathForResource(fileName, ofType: ""),
-            x = try? String(contentsOfFile: path, encoding: NSASCIIStringEncoding) {
-                return x.componentsSeparatedByString("\n").map { $0.characters.map { translation[$0] ?? .Empty } }
+        if let path = Bundle.main.path(forResource: fileName, ofType: ""),
+            let x = try? String(contentsOfFile: path, encoding: .ascii) {
+            return x.components(separatedBy: "\n").map { $0.map { translation[$0] ?? .Empty } }
         }
         return [[.Player]]
     }
 
     private func loadField(fromFile fileName: String) {
-        overlay.setLevel(fileName)
+        overlay.levelName = fileName
         let field = getField(fromFile: fileName)
         enemies = []
         gun = nil
         var x = -1, y = -1
-        for (i,line) in field.enumerate() {
-            for (j,cell) in line.enumerate() {
+        for (i,line) in field.enumerated() {
+            for (j,cell) in line.enumerated() {
                 switch (cell) {
                 case .Player:
                     assert(x < 0, "Unable to load \(fileName). A field cannot contain more than one player")
@@ -103,27 +103,27 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         assert(x >= 0, "Unable to load \(fileName). A field should contain player item")
         ship = GameShip(onScene: scene, withController: self, atX: x, y: y, facing: .East)
         gameField = field
-        GameLevel.loadField(field, toScene: self.scene)
+        GameLevel.load(field: field, toScene: self.scene)
         updateOverlay()
     }
 
     private func moveShip(dir: GameShip.MoveDirection) {
-        switch(ship?.move(dir)) {
-        case .Some(.NextLevel):
+        switch(ship?.move(dir: dir)) {
+        case .some(.NextLevel):
             loadNextLevel()
-        case .Some(.GunFound):
+        case .some(.GunFound):
             gun = nil
             updateOverlay()
-        case .Some(.GameOver):
+        case .some(.GameOver):
             gameOver()
-        case .Some(.Success), .None:
+        case .some(.Success), .none:
             break
         }
     }
 
     private func updateOverlay() {
         if let ship = ship {
-            overlay.setBullets(ship.bullets)
+            overlay.bulletCount = ship.bullets
         }
     }
 
@@ -136,22 +136,22 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         }
     }
 
-    func keyDown(key: Key) -> Bool {
+    func keyDown(_ key: Key) -> Bool {
         guard !freeze else {
             return false
         }
         switch(key) {
         case .Left:
-            ship?.rotate(.Left)
+            ship?.rotate(dir: .Left)
             return true
         case .Right:
-            ship?.rotate(.Right)
+            ship?.rotate(dir: .Right)
             return true
         case .Backwards:
-            moveShip(.Backwards)
+            moveShip(dir: .Backwards)
             return true
         case .Forward:
-            moveShip(.Forward)
+            moveShip(dir: .Forward)
             return true
         case .Action:
             if let bullet = ship?.shoot() {
@@ -163,13 +163,13 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         }
     }
 
-    func keyUp(key: Key) -> Bool {
+    func keyUp(_ key: Key) -> Bool {
         return false
     }
 
-    func updateAtTime(time: NSTimeInterval) {
+    func update(at time: TimeInterval) {
         for enemy in enemies {
-            switch(enemy.move(time)) {
+            switch(enemy.move(at: time)) {
             case .Success:
                 break
             case .NextLevel:
@@ -184,7 +184,7 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         }
         var brokenBullets = [GameBullet]()
         for bullet in bullets {
-            switch(bullet.move(time)) {
+            switch(bullet.move(at: time)) {
             case .Success:
                 break
             case .BulletBreaks:
@@ -193,8 +193,8 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
                 ship?.bulletDies()
             case let .EnemyKilled(x, y):
                 print("Enemy at \((x,y)) has been killed")
-                if let deadEnemyIndex = enemies.indexOf({$0.isAt(x: x, y: y)}) {
-                    enemies.removeAtIndex(deadEnemyIndex)
+                if let deadEnemyIndex = enemies.index(where: {$0.isAt(x: x, y: y)}) {
+                    enemies.remove(at: deadEnemyIndex)
                 }
                 brokenBullets.append(bullet)
                 ship?.bulletDies()
@@ -206,14 +206,15 @@ class GameEngine: GameProcessor, KeyEventsDelegate, GameController {
         updateOverlay()
     }
 
-    func itemAt(coordinates: (Int, Int)) -> GameItem {
-        guard coordinates.0 >= 0 && coordinates.0 < gameField.count && coordinates.1 >= 0 && coordinates.1 < gameField[coordinates.0].count else {
-            return .Exit
+    subscript(_ coordinates: (Int, Int)) -> GameItem {
+        get {
+            guard coordinates.0 >= 0 && coordinates.0 < gameField.count && coordinates.1 >= 0 && coordinates.1 < gameField[coordinates.0].count else {
+                return .Exit
+            }
+            return gameField[coordinates.0][coordinates.1]
         }
-        return gameField[coordinates.0][coordinates.1]
-    }
-
-    func setItemAt(coordinates: (Int, Int), item: GameItem) {
-        gameField[coordinates.0][coordinates.1] = item
+        set {
+            gameField[coordinates.0][coordinates.1] = newValue
+        }
     }
 }

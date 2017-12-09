@@ -17,31 +17,31 @@ class GameShip {
         game = controller
 
         xy = (x,y)
-        node.moveTo(xy)
+        node.move(to: xy)
         direction = dir
-        node.rotateTo(dir)
+        node.rotate(to: dir)
     }
 
-    private class func createNode(camera camera: SCNNode) -> SCNNode {
+    private class func createNode(camera: SCNNode) -> SCNNode {
         let scene = SCNScene(named: "art.scnassets/ship.dae")!
-        let shipNode = scene.rootNode.childNodeWithName("ship", recursively: true)!
+        let shipNode = scene.rootNode.childNode(withName: "ship", recursively: true)!
 
-        SCNTransaction.setAnimationDuration(0)
+        SCNTransaction.animationDuration = 0
         // place the camera
         camera.position = SCNVector3(x: 0, y: 4, z: -15)
-        camera.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
+        camera.rotation = SCNVector4(x: 0, y: 1, z: 0, w: .pi)
 
         // create and add a light to the scene
         let light = SCNLight()
-        light.type = SCNLightTypeSpot
+        light.type = .spot
         light.spotInnerAngle = 0.1
         light.spotInnerAngle = 0.2
         light.castsShadow = true
-        light.shadowColor = GameColor.blackColor()
+        light.shadowColor = GameColor.black
 
         let lightNode = SCNNode()
         lightNode.light = light
-        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: GameFloat(M_PI))
+        lightNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: .pi)
         lightNode.position = SCNVector3(x: 0, y: 2, z: 0)
 
         // group a player
@@ -56,14 +56,14 @@ class GameShip {
     }
 
     func rotate(dir: RotateDirection) {
-        SCNTransaction.setAnimationDuration(0.5)
+        SCNTransaction.animationDuration = 0.5
         switch(dir) {
         case .Left:
             direction = direction.left
-            node.rotation.w += GameFloat(M_PI_2)
+            node.rotation.w += .pi/2
         case .Right:
             direction = direction.right
-            node.rotation.w -= GameFloat(M_PI_2)
+            node.rotation.w -= .pi/2
         }
         print("Ship is at \(xy) facing \(direction.rawValue)")
     }
@@ -72,20 +72,20 @@ class GameShip {
         let moveDirection = dir == .Forward ? direction : direction.opposite
         let next = moveDirection.getNextPosition(xy)
         print("Ship next is at \(next)")
-        switch(game.itemAt(next)) {
+        switch(game[next]) {
         case .Empty:
-            SCNTransaction.setAnimationDuration(0.5)
-            game.setItemAt(xy, item: .Empty)
+            SCNTransaction.animationDuration = 0.5
+            game[xy] = .Empty
             xy = next
-            node.moveTo(xy)
-            game.setItemAt(xy, item: .Player)
+            node.move(to: xy)
+            game[xy] = .Player
             return .Success
         case .Gun(let bullets):
-            SCNTransaction.setAnimationDuration(0.5)
-            game.setItemAt(xy, item: .Empty)
+            SCNTransaction.animationDuration = 0.5
+            game[xy] = .Empty
             xy = next
-            node.moveTo(xy)
-            game.setItemAt(xy, item: .Player)
+            node.move(to: xy)
+            game[xy] = .Player
             self.bullets = bullets
             return .GunFound
         case .Enemy:

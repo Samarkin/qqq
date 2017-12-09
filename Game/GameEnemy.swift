@@ -6,7 +6,7 @@ class GameEnemy {
     private var direction: GameDirection
     private var oldXY: (Int, Int)?
     private var xy: (Int, Int)
-    private let stepTime: NSTimeInterval = 1
+    private let stepTime: TimeInterval = 1
     private var timeToMove = true
 
     init(onScene scene: GameScene, withController controller: GameController, atX x: Int, y: Int, facing dir: GameDirection, number: Int) {
@@ -14,44 +14,44 @@ class GameEnemy {
         direction = dir
         game = controller
         node = GameEnemy.createNode(bodyColor: colors[number%colors.count])
-        node.rotateTo(dir)
-        node.moveTo((x,y))
+        node.rotate(to: dir)
+        node.move(to: (x,y))
         scene.addChildNode(node)
     }
 
-    private let colors = [
-        GameColor.redColor(),
-        GameColor.yellowColor(),
-        GameColor.greenColor(),
-        GameColor.blueColor(),
-        GameColor.orangeColor()
+    private let colors: [GameColor] = [
+        .red,
+        .yellow,
+        .green,
+        .blue,
+        .orange
     ]
 
-    func move(time: NSTimeInterval) -> GameMoveResult {
+    func move(at time: TimeInterval) -> GameMoveResult {
         guard timeToMove else {
             return .Success
         }
         timeToMove = false
         let nextPosition = direction.getNextPosition(xy)
-        if game.itemAt(nextPosition).isPlayer {
+        if game[nextPosition].isPlayer {
             return .GameOver
         }
         SCNTransaction.begin()
-        SCNTransaction.setAnimationDuration(stepTime)
-        SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear))
-        if game.itemAt(nextPosition).isEmpty {
+        SCNTransaction.animationDuration = stepTime
+        SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        if game[nextPosition].isEmpty {
             oldXY = xy
             xy = nextPosition
-            game.setItemAt(xy, item: .Enemy(direction))
-            node.moveTo(xy)
+            game[xy] = .Enemy(direction)
+            node.move(to: xy)
         } else {
             direction = direction.opposite
-            node.rotation.w = node.rotation.w + GameFloat(M_PI)
+            node.rotation.w = node.rotation.w + .pi
             oldXY = nil
         }
-        SCNTransaction.setCompletionBlock { [weak self] in
-            if let me = self, oldxy = me.oldXY {
-                me.game.setItemAt(oldxy, item: .Empty)
+        SCNTransaction.completionBlock = { [weak self] in
+            if let me = self, let oldxy = me.oldXY {
+                me.game[oldxy] = .Empty
             }
             self?.timeToMove = true
         }
@@ -59,22 +59,22 @@ class GameEnemy {
         return .Success
     }
 
-    func isAt(x x: Int, y: Int) -> Bool {
+    func isAt(x: Int, y: Int) -> Bool {
         return xy.0 == x && xy.1 == y
             || oldXY?.0 == x && oldXY?.1 == y
     }
 
-    private class func createNode(bodyColor bodyColor: GameColor) -> SCNNode {
+    private class func createNode(bodyColor: GameColor) -> SCNNode {
         let bodyMaterial = SCNMaterial()
         bodyMaterial.diffuse.contents = bodyColor
         bodyMaterial.emission.contents = bodyColor
         bodyMaterial.emission.intensity = 1
         let eyeMaterial = SCNMaterial()
-        eyeMaterial.diffuse.contents = GameColor.whiteColor()
-        eyeMaterial.emission.contents = GameColor.whiteColor()
+        eyeMaterial.diffuse.contents = GameColor.white
+        eyeMaterial.emission.contents = GameColor.white
         eyeMaterial.emission.intensity = 1
         let light = SCNLight()
-        light.type = SCNLightTypeOmni
+        light.type = .omni
         light.attenuationStartDistance = 5.0
         light.attenuationEndDistance = 15.0
         light.color = bodyColor
@@ -103,9 +103,9 @@ class GameEnemy {
     }
 
     deinit {
-        game?.setItemAt(xy, item: .Empty)
+        game?[xy] = .Empty
         if let oldxy = oldXY {
-            game?.setItemAt(oldxy, item: .Empty)
+            game?[oldxy] = .Empty
         }
         node.removeFromParentNode()
     }
